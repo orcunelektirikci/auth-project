@@ -10,6 +10,7 @@ specifiers:
   typescript: ^5.3.3
   vue: ^3.4.19
   vue-router: ^4.2.5
+  vue-toast-notification: ^3
 
 dependencies:
   '@pinia-plugin-persistedstate/nuxt': 1.2.0_cfppjd6xp653is4us5ly5ikwhq
@@ -18,6 +19,7 @@ dependencies:
   pinia: 2.1.7_kn7nw36bcvznkcpxy3k3ah4noi
   vue: 3.4.19_typescript@5.3.3
   vue-router: 4.2.5_vue@3.4.19
+  vue-toast-notification: 3.1.2_vue@3.4.19
 
 devDependencies:
   '@antfu/eslint-config': 2.6.4_xdgzedli73k7lw4xlyzszm74om
@@ -7418,6 +7420,15 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@vue/devtools-api': 6.6.1
+      vue: 3.4.19_typescript@5.3.3
+    dev: false
+
+  /vue-toast-notification/3.1.2_vue@3.4.19:
+    resolution: {integrity: sha512-oNRL/W9aaHoeScp+iTIW7k09vM16/+8aptp2maa+7qTB43JuxmAgKdXKFYtf+uvSNOYYq2BIWgLCeJ61pwom/A==}
+    engines: {node: '>=12.15.0'}
+    peerDependencies:
+      vue: ^3.0
+    dependencies:
       vue: 3.4.19_typescript@5.3.3
     dev: false
 

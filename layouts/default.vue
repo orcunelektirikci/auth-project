@@ -22,19 +22,19 @@ const handleLogout = () => {
             Home
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink v-if="!isLoggedIn" to="/login">
+        <li v-if="!isLoggedIn">
+          <NuxtLink to="/login">
             Login
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink v-if="!isLoggedIn" to="/register">
+        <li v-if="!isLoggedIn">
+          <NuxtLink to="/register">
             Register
           </NuxtLink>
         </li>
-        <li>
-          <NuxtLink v-if="isLoggedIn" to="/testpage">
-            test page
+        <li v-if="isLoggedIn">
+          <NuxtLink to="/blog">
+            blog
           </NuxtLink>
         </li>
         <li v-if="isLoggedIn">

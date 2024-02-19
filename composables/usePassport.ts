@@ -3,6 +3,7 @@ import type { FETCH_OPTIONS, TOKEN_TYPE } from '~/types/request'
 const accessToken = ref<string>('')
 const refreshToken = ref<string>('')
 const config = useRuntimeConfig()
+const $toast = useNuxtApp().$toast
 
 export function usePassport() {
   const fetch = async (uri: string, options: FETCH_OPTIONS = {}) => {
@@ -58,27 +59,27 @@ export function usePassport() {
       scope: '*',
     }
 
-    // Todo:: fix any
-    const { data }: { data: any } = await useFetch(`${config.public.apiUrl}/oauth/token`, {
+    const { data, error }: { data: any, error: any } = await useFetch(`${config.public.apiUrl}/oauth/token`, {
       method: 'POST',
       body: { ...passportConfig, username, password },
     })
 
-    if (Object.prototype.hasOwnProperty.call(data, 'error'))
-      return data.error
+    if (error.value) {
+      useToastMessage(error.value.statusCode, error.value.data?.message).showError()
+      return error
+    }
 
     setToken('access_token', data.value.access_token)
     setToken('refresh_token', data.value.reset_token)
 
-    const resp = { ...data.value }
+    const resp = { ...toValue(data) }
 
-    // Todo:: fix any
-    const { data: me }: { data: any } = await fetch('/api/me')
+    const { data: me, error: meError }: { data: any, error: any } = await fetch('/api/me')
 
-    if (Object.prototype.hasOwnProperty.call(data, 'error'))
-      return data.error
+    if (meError.value)
+      useToastMessage(meError.value.statusCode, meError.value.data?.message).showError()
 
-    resp.user = toValue(me).data
+    resp.user = me.value.data
 
     return resp
   }
