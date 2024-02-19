@@ -41,7 +41,7 @@ watch(() => route.path, () => {
         <ul class="flex flex-col md:flex-row items-center mx-auto md:gap-[4vw] gap-8">
           <template v-for="item in items" :key="item.to">
             <li v-if="item.display" class="hover:text-gray-500 text-xl md:text-auto">
-              <NuxtLink :to="item.to">
+              <NuxtLink active-class="underline underline-offset-2 md:underline-offset-8 text-gray-500" :to="item.to">
                 {{ item.text }}
               </NuxtLink>
             </li>
