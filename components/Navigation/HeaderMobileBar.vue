@@ -29,7 +29,7 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-  <header class="bg-white bg-opacity-80 py-3">
+  <header class="bg-white py-3">
     <nav class="flex justify-between item-center w-[92%] mx-auto">
       <div>
         <slot name="logo" />
