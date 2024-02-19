@@ -35,7 +35,7 @@ watch(() => route.path, () => {
         <slot name="logo" />
       </div>
       <div
-        class="absolute md:static bg-white md:bg-transparent translate-y-[6%]  top-0 min-h-[95%] md:min-h-fit left-0 w-full md:w-auto flex items-center px-5 transition-all duration-300 ease-in-out"
+        class="absolute md:static bg-white md:bg-transparent md:opacity-100 translate-y-[6%]  top-0 min-h-[95%] md:min-h-fit left-0 w-full md:w-auto flex items-center px-5 transition-all duration-300 ease-in-out"
         :class="showMenu ? 'opacity-100' : 'opacity-0'"
       >
         <ul class="flex flex-col md:flex-row items-center mx-auto md:gap-[4vw] gap-8">
