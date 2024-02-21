@@ -1,9 +1,7 @@
 <script setup lang="ts">
-interface Props {
-  title?: string
-}
+import type { CARD_PROPS } from '~/types/UI/card'
 
-withDefaults(defineProps<Props>(), { title: undefined })
+withDefaults(defineProps<CARD_PROPS>(), { title: undefined })
 
 const slots = useSlots()
 const titleSlotHasContent = computed(() => Object.prototype.hasOwnProperty.call(slots, 'title'))

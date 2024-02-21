@@ -10,20 +10,7 @@ export function useSanctum() {
     let headers = {} as Record<string, string>
     let oauthToken = ''
 
-    if (options.headers)
-      headers = { ...options.headers }
-
-    if (!Object.prototype.hasOwnProperty.call(headers, 'Authorization')) {
-      if (accessToken.value)
-        oauthToken = accessToken.value
-      else
-        oauthToken = localStorage.getItem('oauth-token') || '' as string
-
-      headers = { ...headers, Authorization: `Bearer ${oauthToken}` }
-    }
-
     const csrfToken = useCookie('XSRF-TOKEN')
-
     if (csrfToken.value) {
       headers['X-XSRF-TOKEN'] = csrfToken.value as string
     }
@@ -37,6 +24,18 @@ export function useSanctum() {
           },
         }),
       }
+    }
+
+    if (options.headers)
+      headers = { ...options.headers }
+
+    if (!Object.prototype.hasOwnProperty.call(headers, 'Authorization')) {
+      if (accessToken.value)
+        oauthToken = accessToken.value
+      else
+        oauthToken = localStorage.getItem('oauth-token') || '' as string
+
+      headers = { ...headers, Authorization: `Bearer ${oauthToken}` }
     }
 
     if (!options.method)
