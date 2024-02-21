@@ -13,20 +13,22 @@ const loginForm = reactive<LOGIN_FIELDS>({
   password: '',
 })
 
+const loading = ref(false)
+
 const { login } = useApi()
 
 const authStore = useAuthStore()
 
 const handleLogin = async () => {
+  loading.value = true
   const result = await login(loginForm.email, loginForm.password)
-
-  console.log({ result })
 
   if (!result.error) {
     authStore.setAccessToken(result.access_token)
     authStore.setAuthUser(result.user)
     navigateTo('/', { replace: true })
   }
+  loading.value = false
 }
 </script>
 
@@ -55,7 +57,7 @@ const handleLogin = async () => {
       </div>
 
       <div class="flex items-center justify-between">
-        <Button type="submit">
+        <Button type="submit" :loading="loading">
           Login
         </Button>
 

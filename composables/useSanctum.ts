@@ -79,7 +79,7 @@ export function useSanctum() {
     const { error: csrfError } = await getCsrfCookie()
 
     if (csrfError.value) {
-      useToastMessage(csrfError.value.data.statusCode, csrfError.value.data?.message).showError()
+      useToastMessage(csrfError.value?.data?.statusCode, csrfError.value?.data?.message).showError()
       return csrfError
     }
 

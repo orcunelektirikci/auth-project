@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 import type { BUTTON_PROPS } from '~/types/UI/button'
 
 const props = withDefaults(defineProps<BUTTON_PROPS>(), {
@@ -6,9 +7,10 @@ const props = withDefaults(defineProps<BUTTON_PROPS>(), {
   size: 'md',
   variant: 'primary',
   rounded: true,
+  loading: false,
 })
 
-const defaultSyles = 'outline-none px-2 py-1 '
+const defaultStyles = 'outline-none px-2 py-1 '
 
 let btnSize = ''
 
@@ -51,9 +53,10 @@ const rounded = props.rounded ? 'border rounded-md' : 'border'
 <template>
   <button
     :type="type"
-    :class="[defaultSyles, btnSize, btnVariant, rounded]"
+    :class="[defaultStyles, btnSize, btnVariant, rounded]"
   >
-    <slot />
+    <ArrowPathIcon v-if="loading" class="h-5 w-10 animate-spin" />
+    <slot v-else />
   </button>
 </template>
 

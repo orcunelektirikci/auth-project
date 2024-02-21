@@ -3,4 +3,5 @@ export interface BUTTON_PROPS {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   variant?: 'primary' | 'secondary' | 'outlined' | 'text'
   rounded?: boolean
+  loading?: boolean
 }
