@@ -6,12 +6,14 @@ export default defineNuxtConfig({
       apiUrl: process.env.API_ENDPOINT,
       passportClientId: process.env.PASSPORT_CLIENT_ID,
       passportClientSecret: process.env.PASSPORT_CLIENT_SECRET,
+      authProvider: process.env.AUTH_PROVIDER || 'passport',
     },
   },
   modules: [
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
+    'nuxt-lodash',
     [
       '@nuxtjs/google-fonts',
       {

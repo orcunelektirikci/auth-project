@@ -63,7 +63,7 @@ const handleRegister = () => {
     <div class="text-md mt-4 text-center md:w-4/6 lg:w-3/5 mx-auto">
       <p>
         Have an account?
-        <NuxtLink to="/login" tag="a" class="text-blue-500">
+        <NuxtLink to="/login" tag="a" class="text-primary">
           Login
         </NuxtLink>
       </p>

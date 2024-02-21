@@ -1,47 +1,47 @@
 <script setup lang="ts">
-interface PROPS {
-  type?: 'button' | 'submit' | undefined
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'primary' | 'outlined' | 'text'
-  rounded?: boolean
-}
+import type { BUTTON_PROPS } from '~/types/UI/button'
 
-const props = withDefaults(defineProps<PROPS>(), {
+const props = withDefaults(defineProps<BUTTON_PROPS>(), {
   type: 'button',
   size: 'md',
   variant: 'primary',
   rounded: true,
 })
 
+const defaultSyles = 'outline-none px-2 py-1 '
+
 let btnSize = ''
 
 switch (props.size) {
   case 'sm':
-    btnSize = 'px-2 py-1 text-sm'
+    btnSize = 'text-sm'
     break
   case 'md':
-    btnSize = 'px-2 py-1 text-md'
+    btnSize = 'text-md'
     break
   case 'lg':
-    btnSize = 'px-2 py-1 text-lg'
+    btnSize = 'text-lg'
     break
   case 'xl':
-    btnSize = 'px-2 py-1 text-xl'
+    btnSize = 'text-xl'
     break
   default:
-    btnSize = 'px-2 py-1 text-md'
+    btnSize = 'text-md'
 }
 
 let btnVariant = ''
 switch (props.variant) {
   case 'primary':
-    btnVariant = 'bg-blue-500 text-white'
+    btnVariant = 'bg-primary text-white'
+    break
+  case 'secondary':
+    btnVariant = 'bg-secondary text-white'
     break
   case 'outlined':
-    btnVariant = 'border bg-transparent text-black'
+    btnVariant = 'border bg-transparent text-primary'
     break
   case 'text':
-    btnVariant = 'border-none bg-transparent text-black'
+    btnVariant = 'border-none bg-transparent text-primary'
     break
 }
 
@@ -51,7 +51,7 @@ const rounded = props.rounded ? 'border rounded-md' : 'border'
 <template>
   <button
     :type="type"
-    :class="[btnSize, btnVariant, rounded]"
+    :class="[defaultSyles, btnSize, btnVariant, rounded]"
   >
     <slot />
   </button>

@@ -1,14 +1,14 @@
 import { useToast } from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-sugar.css'
 
-export function useToastMessage(statusCode: number | string, message: string) {
-  const toastr = useToast({
+export function useToastMessage(statusCode: number | string, message: string, duration: number = 3000) {
+  const toast = useToast({
     position: 'bottom',
-    duration: '3000',
+    duration,
   })
 
-  const showError = () => toastr.error(`${statusCode}: ${message}`)
-  const showSuccess = () => toastr.success(`${statusCode}: ${message}`)
+  const showError = () => toast.error(`${statusCode}: ${message}`)
+  const showSuccess = () => toast.success(`${statusCode}: ${message}`)
 
   return {
     showError,

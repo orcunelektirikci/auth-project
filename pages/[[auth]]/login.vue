@@ -13,7 +13,8 @@ const loginForm = reactive<LOGIN_FIELDS>({
   password: '',
 })
 
-const { login } = usePassport()
+const { login } = useApi()
+
 const authStore = useAuthStore()
 
 const handleLogin = async () => {
@@ -69,7 +70,7 @@ const handleLogin = async () => {
 
     <div class="mt-4 text-center md:w-4/6 lg:w-3/5 mx-auto">
       <p>Don't have an account?</p> <p>
-        <NuxtLink to="/register" tag="a" class="text-blue-500">
+        <NuxtLink to="/register" tag="a" class="text-primary">
           Register here
         </NuxtLink>
       </p>
