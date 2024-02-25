@@ -1,2 +1,2 @@
-# A Basic Nuxt3, Laravel Passport Login Scaffolding
-### Using Pinia, Persisted State, Bearer Auth Token
+# A Basic Nuxt3, Laravel Passport or Sanctum Login Scaffolding
+### Using Pinia, Persisted State, Bearer Auth Token and/or CSRF Tokens
