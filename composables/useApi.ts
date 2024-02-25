@@ -9,7 +9,7 @@ export function useApi() {
   }
 
   const config = useRuntimeConfig()
-  const authProvider = config.public?.authProvider || 'passport'
+  const authProvider = config.public?.authProvider || 'sanctum'
 
   if (!Object.prototype.hasOwnProperty.call(supportedProviders, authProvider))
     throw createError({ statusCode: 500, message: `${authProvider} is not supported!` })
