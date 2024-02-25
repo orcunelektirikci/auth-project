@@ -11,6 +11,7 @@ definePageMeta({
 const loginForm = reactive<LOGIN_FIELDS>({
   email: '',
   password: '',
+  remember: true,
 })
 
 const loading = ref(false)
@@ -21,7 +22,7 @@ const authStore = useAuthStore()
 
 const handleLogin = async () => {
   loading.value = true
-  const result = await login(loginForm.email, loginForm.password)
+  const result = await login(loginForm.email, loginForm.password, !!loginForm.remember)
 
   if (!result.error) {
     authStore.setAccessToken(result.access_token)
@@ -63,7 +64,7 @@ const handleLogin = async () => {
 
         <div>
           <label>
-            <input type="checkbox" value="remember">
+            <input v-model="loginForm.remember" type="checkbox" value="remember">
             <span class="ml-2">Remember me?</span>
           </label>
         </div>

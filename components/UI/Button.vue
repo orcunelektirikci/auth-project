@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ArrowPathIcon } from '@heroicons/vue/24/outline'
+import type { ClassValue } from 'clsx'
+import { cn } from '~/utils/cn'
 import type { BUTTON_PROPS } from '~/types/UI/button'
 
 const props = withDefaults(defineProps<BUTTON_PROPS>(), {
@@ -10,25 +12,25 @@ const props = withDefaults(defineProps<BUTTON_PROPS>(), {
   loading: false,
 })
 
-const defaultStyles = 'outline-none px-2 py-1 '
+const defaultStyles = 'outline-none '
 
 let btnSize = ''
 
 switch (props.size) {
   case 'sm':
-    btnSize = 'text-sm'
+    btnSize = 'text-sm px-2 py-1'
     break
   case 'md':
-    btnSize = 'text-md'
+    btnSize = 'text-md px-2 py-1'
     break
   case 'lg':
-    btnSize = 'text-lg'
+    btnSize = 'text-lg px-4 py-2'
     break
   case 'xl':
-    btnSize = 'text-xl'
+    btnSize = 'text-xl px-6 py-4'
     break
   default:
-    btnSize = 'text-md'
+    btnSize = 'text-md px-2 py-1'
 }
 
 let btnVariant = ''
@@ -53,7 +55,7 @@ const rounded = props.rounded ? 'border rounded-md' : 'border'
 <template>
   <button
     :type="type"
-    :class="[defaultStyles, btnSize, btnVariant, rounded]"
+    :class="cn(defaultStyles, btnSize, btnVariant, rounded, $attrs.class as ClassValue)"
   >
     <ArrowPathIcon v-if="loading" class="h-5 w-10 animate-spin" />
     <slot v-else />

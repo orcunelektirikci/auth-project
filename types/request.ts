@@ -4,6 +4,12 @@ export interface FETCH_OPTIONS {
   method?: REST_VERB
   headers?: Record<string, string>
   body?: object | null
+  baseURL?: string
 }
 
 export type TOKEN_TYPE = 'access_token' | 'refresh_token'
+
+export interface SubResourceBody {
+  id: number | string
+  subResourceStoreName: string
+}

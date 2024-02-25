@@ -1,127 +1,129 @@
-import type { FETCH_OPTIONS, TOKEN_TYPE } from '~/types/request'
-
-const config = useRuntimeConfig()
+import type { FETCH_OPTIONS } from '~/types/request'
+import type { LOGIN_DATA, LOGIN_RESPONSE_DATA } from '~/types/response'
+import type { USER } from '~/types/store/users'
+import { useHttpHelper } from '~/composables/useHttpHelper'
+import { sanitizeUrl } from '~/utils/helpers'
 
 const accessToken = ref<string>('')
-const refreshToken = ref<string>('')
 
 export function useSanctum() {
-  const fetch = async (uri: string, options: FETCH_OPTIONS = {}) => {
-    let headers = {} as Record<string, string>
+  const config = useRuntimeConfig()
+
+  const sendRequest = async (uri: string, options: FETCH_OPTIONS = {}, addApiPrefix: boolean = true) => {
+    let headers = { Accept: 'application/json', ...(options.headers || {}) } as Record<string, string>
     let oauthToken = ''
 
     const csrfToken = useCookie('XSRF-TOKEN')
-    if (csrfToken.value) {
+    if (csrfToken.value)
       headers['X-XSRF-TOKEN'] = csrfToken.value as string
-    }
-    else {
-      return {
-        data: toRef(null),
-        error: toRef({
-          statusCode: 401,
-          data: {
-            message: 'Unauthorized!',
-          },
-        }),
-      }
-    }
 
-    if (options.headers)
-      headers = { ...options.headers }
+    if (config.public.apiUrl)
+      options.baseURL = `${config.public.apiUrl}${sanitizeUrl(addApiPrefix && config.public.apiPrefix ? `${config.public.apiPrefix}` : '')}`
 
-    if (!Object.prototype.hasOwnProperty.call(headers, 'Authorization')) {
-      if (accessToken.value)
-        oauthToken = accessToken.value
-      else
-        oauthToken = localStorage.getItem('oauth-token') || '' as string
+    if (accessToken.value)
+      oauthToken = accessToken.value
+    else
+      oauthToken = localStorage.getItem('oauth-token') || '' as string
 
+    if (oauthToken && oauthToken !== '')
       headers = { ...headers, Authorization: `Bearer ${oauthToken}` }
-    }
 
     if (!options.method)
       options.method = 'GET'
 
-    return useFetch(`${config.public.apiUrl}${uri}`, { ...options, headers, watch: false })
+    return $fetch(sanitizeUrl(uri), {
+      retry: false,
+      cache: 'no-cache',
+      ...options,
+      headers,
+      watch: false,
+      onResponseError({ response: errResponse }) {
+        useHttpHelper().parseErrorHandler(errResponse)
+      },
+    }).catch((err) => {
+      return err
+    })
   }
 
-  const revokeToken = (type: TOKEN_TYPE = 'access_token') => {
-    if (type === 'refresh_token')
-      refreshToken.value = ''
-    else
-      accessToken.value = ''
+  const revokeToken = () => {
+    accessToken.value = ''
   }
 
-  const setToken = (type: TOKEN_TYPE, value: string) => {
-    if (type === 'refresh_token') {
-      refreshToken.value = value
-    }
-    else {
-      accessToken.value = value
-      localStorage.setItem('oauth-token', value)
-    }
+  const setToken = (value: string) => {
+    accessToken.value = value
+    localStorage.setItem('oauth-token', value)
   }
 
   const reset = () => {
     const authCookie = useCookie('XSRF-TOKEN')
     authCookie.value = null
-
     accessToken.value = ''
     localStorage.removeItem('oauth-token')
   }
 
   const getCsrfCookie = async () => {
-    return await useFetch(`${config.public.apiUrl}/sanctum/csrf-cookie`, {
+    await $fetch(sanitizeUrl(config.public.apiCookiePath) as string, {
       credentials: 'include',
+      baseURL: config.public.apiUrl,
     })
+
+    return useCookie('XSRF-TOKEN')
   }
 
-  const login = async (email: string, password: string) => {
-    const { error: csrfError } = await getCsrfCookie()
+  const fetchUser = async () => {
+    const me: any = await sendRequest(config.public.apiUserPath)
 
-    if (csrfError.value) {
-      useToastMessage(csrfError.value?.data?.statusCode, csrfError.value?.data?.message).showError()
-      return csrfError
+    if (me.error) {
+      useToastMessage(me.error.statusCode, me.error.message).showError()
+      return me.error
     }
 
-    const csrfToken = useCookie('XSRF-TOKEN')
+    return me
+  }
 
-    const { data, error }: { data: any, error: any } = await useFetch(`${config.public.apiUrl}/api/login`, {
-      credentials: 'include',
+  const login = async (email: string, password: string, remember: boolean = false) => {
+    const csrfToken = await getCsrfCookie()
+
+    if (!csrfToken.value) {
+      useToastMessage(500, useI18n().t('auth.login.couldNotLogin')).showError()
+      return
+    }
+
+    // @ts-expect-error fix fetch types
+    const loginResponse: LOGIN_RESPONSE_DATA = await sendRequest(config.public.apiLoginPath, {
       method: 'POST',
-      body: { email, password },
-      headers: {
-        'Accept': 'application/json',
-        'X-XSRF-TOKEN': csrfToken.value as string,
-      },
+      body: { email, password, remember },
     })
 
-    if (error.value) {
-      useToastMessage(error.value.statusCode, error.value.data?.message).showError()
-      return error
+    if ('access_token' in loginResponse && loginResponse.access_token) {
+      setToken(loginResponse.access_token)
+      localStorage.setItem('oauth-token', loginResponse.access_token)
+    }
+    else {
+      return loginResponse
     }
 
-    if (data.value?.access_token) {
-      setToken('access_token', data.value.access_token)
-      localStorage.setItem('oauth-token', data.value.access_token)
-    }
+    // @ts-expect-error fix fetch types
+    const resp: LOGIN_DATA & { user: USER } = { ...loginResponse }
 
-    const resp = { ...toValue(data) }
-
-    const { data: me, error: meError }: { data: any, error: any } = await fetch('/api/me')
-
-    if (meError.value)
-      useToastMessage(meError.value.statusCode, meError.value.data?.message).showError()
-
-    resp.user = me.value.data
+    const me = await fetchUser()
+    resp.user = me.data
 
     return resp
   }
 
+  const logout = async () => {
+    reset()
+    await sendRequest('/logout')
+  }
+
   return {
     login,
-    fetch,
+    sendRequest,
+    fetchUser,
     revokeToken,
     setToken,
+    logout,
     reset,
   }
 }
