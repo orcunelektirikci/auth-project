@@ -20,7 +20,7 @@ const handleRegister = () => {
 </script>
 
 <template>
-  <UICard class="md:w-9/12 lg:w-1/2 text-md md:text-lg bg-white">
+  <UiCard class="md:w-9/12 lg:w-1/2 text-md md:text-lg bg-white">
     <template #title>
       <div class="mb-4 border-b text-center flex flex-col space-y-2 pb-2">
         <div class="text-sm">
@@ -66,7 +66,7 @@ const handleRegister = () => {
         </NuxtLink>
       </p>
     </div>
-  </UICard>
+  </UiCard>
 </template>
 
 <style scoped></style>
