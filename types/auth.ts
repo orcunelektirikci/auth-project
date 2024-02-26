@@ -1,10 +1,10 @@
-export interface LOGIN_FIELDS {
+export interface LoginFields {
   email: string
   password: string
   remember?: boolean
 }
 
-export interface REGISTER_FIELDS {
+export interface RegisterFields {
   name: string
   email: string
   password: string

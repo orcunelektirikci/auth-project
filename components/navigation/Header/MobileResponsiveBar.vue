@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Bars2Icon, XMarkIcon } from '@heroicons/vue/24/solid'
-import type { NAV_ITEM } from '~/types/UI/menu'
+import type { NavItem } from '~/types/UI/menu'
 
 interface PROPS {
-  items: NAV_ITEM[]
+  items: NavItem[]
 }
 
 withDefaults(defineProps<PROPS>(), {

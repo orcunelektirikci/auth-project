@@ -1,13 +1,13 @@
-export type REST_VERB = 'GET' | 'get' | 'POST' | 'post' | 'PUT' | 'put' | 'PATCH' | 'patch' | 'DELETE' | 'delete'
+export type RestVerb = 'GET' | 'get' | 'POST' | 'post' | 'PUT' | 'put' | 'PATCH' | 'patch' | 'DELETE' | 'delete'
 
-export interface FETCH_OPTIONS {
-  method?: REST_VERB
+export interface FetchOptions {
+  method?: RestVerb
   headers?: Record<string, string>
   body?: object | null
   baseURL?: string
 }
 
-export type TOKEN_TYPE = 'access_token' | 'refresh_token'
+export type TokenType = 'access_token' | 'refresh_token'
 
 export interface SubResourceBody {
   id: number | string

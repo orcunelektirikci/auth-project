@@ -1,13 +1,13 @@
-import type { FETCH_OPTIONS, TOKEN_TYPE } from '~/types/request'
+import type { FetchOptions, TokenType } from '~/types/request'
 
-export type SUPPORTED_AUTH_PROVIDERS = 'sanctum' | 'passport'
+export type SupportedAuthProviders = 'sanctum' | 'passport'
 
 export interface ApiComposable {
   login: (email: string, password: string) => Promise<any>
-  sendRequest: (uri: string, options?: FETCH_OPTIONS) => Promise<any>
+  sendRequest: (uri: string, options?: FetchOptions) => Promise<any>
   fetchUser: () => Promise<any>
-  revokeToken: (type: TOKEN_TYPE) => void
-  setToken: (type: TOKEN_TYPE, value: string) => void
+  revokeToken: (type: TokenType) => void
+  setToken: (type: TokenType, value: string) => void
   reset: () => void
   logout: () => void
 }

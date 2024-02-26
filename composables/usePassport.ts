@@ -1,8 +1,8 @@
-import type { FETCH_OPTIONS, TOKEN_TYPE } from '~/types/request'
+import type { FetchOptions, TokenType } from '~/types/request'
 import type { ApiComposable } from '~/types/api'
 import { useHttpHelper } from '~/composables/useHttpHelper'
-import type { LOGIN_DATA, LOGIN_RESPONSE_DATA } from '~/types/response'
-import type { USER } from '~/types/store/users'
+import type { LoginData, LoginResponseData } from '~/types/response'
+import type { User } from '~/types/store/users'
 import { sanitizeUrl } from '~/utils/helpers'
 
 const accessToken = ref<string>('')
@@ -11,7 +11,7 @@ const refreshToken = ref<string>('')
 export function usePassport(): ApiComposable {
   const config = useRuntimeConfig()
 
-  const sendRequest = async (uri: string, options: FETCH_OPTIONS = {}, addApiPrefix: boolean = true) => {
+  const sendRequest = async (uri: string, options: FetchOptions = {}, addApiPrefix: boolean = true) => {
     let headers = { Accept: 'application/json', ...(options.headers || {}) } as Record<string, string>
     let oauthToken = ''
 
@@ -43,14 +43,14 @@ export function usePassport(): ApiComposable {
     })
   }
 
-  const revokeToken = (type: TOKEN_TYPE = 'access_token') => {
+  const revokeToken = (type: TokenType = 'access_token') => {
     if (type === 'refresh_token')
       refreshToken.value = ''
     else
       accessToken.value = ''
   }
 
-  const setToken = (type: TOKEN_TYPE, value: string) => {
+  const setToken = (type: TokenType, value: string) => {
     if (type === 'refresh_token') {
       refreshToken.value = value
     }
@@ -86,7 +86,7 @@ export function usePassport(): ApiComposable {
     }
 
     // @ts-expect-error fix fetch types
-    const loginResponse: LOGIN_RESPONSE_DATA = await sendRequest(config.public.apiLoginPath, {
+    const loginResponse: LoginResponseData = await sendRequest(config.public.apiLoginPath, {
       method: 'POST',
       body: { ...passportConfig, username, password },
     }, false)
@@ -103,7 +103,7 @@ export function usePassport(): ApiComposable {
       setToken('refresh_token', loginResponse.refresh_token)
 
     // @ts-expect-error fix fetch types
-    const resp: LOGIN_DATA & { user: USER } = { ...loginResponse }
+    const resp: LoginData & { user: User } = { ...loginResponse }
 
     const me = await fetchUser()
     resp.user = me.data

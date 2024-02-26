@@ -1,5 +1,5 @@
 import { useAuthStore } from '~/stores/useAuthStore'
-import type { ERROR_RESPONSE } from '~/types/response'
+import type { ErrorResponse } from '~/types/response'
 
 export function useHttpHelper() {
   const unAuthenticate = (message: string | undefined) => {
@@ -20,7 +20,7 @@ export function useHttpHelper() {
     405: notfound,
   }
 
-  const parseErrorHandler = (response: ERROR_RESPONSE) => {
+  const parseErrorHandler = (response: ErrorResponse) => {
     const errorHandler = specialErrorCodes[response.status || response.statusCode || 0]
     const message = response?.data?.message || response?._data?.message || response?.message || response?.statusText || undefined
 

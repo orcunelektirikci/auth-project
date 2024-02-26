@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { REGISTER_FIELDS } from '~/types/auth'
+import type { RegisterFields } from '~/types/auth'
 
 definePageMeta({
   middleware: ['guest'],
   layout: 'auth',
 })
 
-const registerForm = reactive<REGISTER_FIELDS>({
+const registerForm = reactive<RegisterFields>({
   name: '',
   email: '',
   password: '',

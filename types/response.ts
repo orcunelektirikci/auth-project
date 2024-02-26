@@ -1,12 +1,12 @@
-export type RESPONSE = SUCCESS_RESPONSE & ERROR_RESPONSE
+export type RESPONSE = SuccessResponse & ErrorResponse
 
-export type LOGIN_RESPONSE_DATA = LOGIN_DATA | LOGIN_ERROR
+export type LoginResponseData = LoginData | LoginError
 
-export interface SUCCESS_RESPONSE {
+export interface SuccessResponse {
   data: any
 }
 
-export interface ERROR_RESPONSE {
+export interface ErrorResponse {
   error?: string
   error_description?: string
   message?: string
@@ -17,9 +17,9 @@ export interface ERROR_RESPONSE {
   _data?: { message?: string }
 }
 
-export interface LOGIN_DATA {
+export interface LoginData {
   access_token?: string
   refresh_token?: string
 }
 
-export interface LOGIN_ERROR extends ERROR_RESPONSE {}
+export interface LoginError extends ErrorResponse {}

@@ -2,9 +2,9 @@
 import { ArrowPathIcon } from '@heroicons/vue/24/outline'
 import type { ClassValue } from 'clsx'
 import { cn } from '~/utils/cn'
-import type { BUTTON_PROPS } from '~/types/UI/button'
+import type { ButtonProps } from '~/types/UI/button'
 
-const props = withDefaults(defineProps<BUTTON_PROPS>(), {
+const props = withDefaults(defineProps<ButtonProps>(), {
   type: 'button',
   size: 'md',
   variant: 'primary',

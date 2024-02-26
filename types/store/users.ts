@@ -1,4 +1,4 @@
-export interface USER {
+export interface User {
   id: number
   name: string
   email: string
@@ -6,6 +6,6 @@ export interface USER {
 }
 
 // Todo:: solve the issue with storing objects in the state
-export interface USER_ITEMS {
-  [key: number | string]: USER
+export interface UserItems {
+  [key: number | string]: User
 }

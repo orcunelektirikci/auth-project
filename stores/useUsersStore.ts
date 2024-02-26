@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import globalGetters from '~/stores/globalGetters'
-import type { USER_ITEMS } from '~/types/store/users'
+import type { UserItems } from '~/types/store/users'
 import globalActions from '~/stores/globalActions'
 
 export const useUsersStore = defineStore('users', {
@@ -16,7 +16,7 @@ export const useUsersStore = defineStore('users', {
       currentPage: 1,
       pageCount: 1,
     },
-    items: {} as USER_ITEMS,
+    items: {} as UserItems,
   }),
   getters: {
     ...globalGetters,

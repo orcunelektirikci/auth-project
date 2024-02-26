@@ -1,4 +1,4 @@
-export interface NAV_ITEM {
+export interface NavItem {
   text: string
   to: string
   display: boolean

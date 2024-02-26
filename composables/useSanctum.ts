@@ -1,6 +1,6 @@
-import type { FETCH_OPTIONS } from '~/types/request'
-import type { LOGIN_DATA, LOGIN_RESPONSE_DATA } from '~/types/response'
-import type { USER } from '~/types/store/users'
+import type { FetchOptions } from '~/types/request'
+import type { LoginData, LoginResponseData } from '~/types/response'
+import type { User } from '~/types/store/users'
 import { useHttpHelper } from '~/composables/useHttpHelper'
 import { sanitizeUrl } from '~/utils/helpers'
 
@@ -9,7 +9,7 @@ const accessToken = ref<string>('')
 export function useSanctum() {
   const config = useRuntimeConfig()
 
-  const sendRequest = async (uri: string, options: FETCH_OPTIONS = {}, addApiPrefix: boolean = true) => {
+  const sendRequest = async (uri: string, options: FetchOptions = {}, addApiPrefix: boolean = true) => {
     let headers = { Accept: 'application/json', ...(options.headers || {}) } as Record<string, string>
     let oauthToken = ''
 
@@ -90,7 +90,7 @@ export function useSanctum() {
     }
 
     // @ts-expect-error fix fetch types
-    const loginResponse: LOGIN_RESPONSE_DATA = await sendRequest(config.public.apiLoginPath, {
+    const loginResponse: LoginResponseData = await sendRequest(config.public.apiLoginPath, {
       method: 'POST',
       body: { email, password, remember },
     })
@@ -104,7 +104,7 @@ export function useSanctum() {
     }
 
     // @ts-expect-error fix fetch types
-    const resp: LOGIN_DATA & { user: USER } = { ...loginResponse }
+    const resp: LoginData & { user: User } = { ...loginResponse }
 
     const me = await fetchUser()
     resp.user = me.data

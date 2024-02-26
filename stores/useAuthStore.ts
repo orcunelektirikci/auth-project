@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import type { USER } from '~/types/store/users'
+import type { User } from '~/types/store/users'
 
 export const useAuthStore = defineStore('auth', {
   persist: true,
   state: () => ({
-    user: null as USER | null,
+    user: null as User | null,
     accessToken: '',
   }),
   getters: {
@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', {
     isAdmin: (state): boolean => !!state.user?.roles?.includes('admin'),
   },
   actions: {
-    setAuthUser(userData: USER) {
+    setAuthUser(userData: User) {
       this.user = userData
     },
     setAccessToken(token: string) {

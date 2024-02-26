@@ -1,4 +1,4 @@
-export interface CARD_PROPS {
+export interface CardProps {
   title?: string
   border?: undefined | 'none' | 'custom'
   borderColor?: undefined | string

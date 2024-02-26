@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { LOGIN_FIELDS } from '~/types/auth'
+import type { LoginFields } from '~/types/auth'
 
 definePageMeta({
   middleware: ['guest'],
   layout: 'auth',
 })
 
-const loginForm = reactive<LOGIN_FIELDS>({
+const loginForm = reactive<LoginFields>({
   email: '',
   password: '',
   remember: true,

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ClassValue } from 'clsx'
-import type { CARD_PROPS } from '~/types/UI/card'
+import type { CardProps } from '~/types/UI/card'
 import { cn } from '~/utils/cn'
 
-const props = withDefaults(defineProps<CARD_PROPS>(), {
+const props = withDefaults(defineProps<CardProps>(), {
   title: undefined,
   borderColor: 'border-primary',
   elevation: 'md',

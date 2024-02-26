@@ -1,9 +1,9 @@
 import { useSanctum } from '~/composables/useSanctum'
 import { usePassport } from '~/composables/usePassport'
-import type { ApiComposable, SUPPORTED_AUTH_PROVIDERS } from '~/types/api'
+import type { ApiComposable, SupportedAuthProviders } from '~/types/api'
 
 export function useApi() {
-  const supportedProviders: Record<SUPPORTED_AUTH_PROVIDERS, () => ApiComposable> = {
+  const supportedProviders: Record<SupportedAuthProviders, () => ApiComposable> = {
     passport: usePassport,
     sanctum: useSanctum,
   }
@@ -14,6 +14,6 @@ export function useApi() {
   if (!Object.prototype.hasOwnProperty.call(supportedProviders, authProvider))
     throw createError({ statusCode: 500, message: `${authProvider} is not supported!` })
 
-  const provider = supportedProviders[authProvider as SUPPORTED_AUTH_PROVIDERS]
+  const provider = supportedProviders[authProvider as SupportedAuthProviders]
   return provider()
 }

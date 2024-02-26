@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import globalActions from '~/stores/globalActions'
 import globalGetters from '~/stores/globalGetters'
-import type { BLOG_ITEMS } from '~/types/store/blogs'
+import type { BlogItems } from '~/types/store/blogs'
 
 export const useBlogsStore = defineStore('blogs', {
   state: () => ({
@@ -16,7 +16,7 @@ export const useBlogsStore = defineStore('blogs', {
       currentPage: 1,
       pageCount: 1,
     },
-    items: {} as BLOG_ITEMS,
+    items: {} as BlogItems,
   }),
   getters: {
     ...globalGetters,
