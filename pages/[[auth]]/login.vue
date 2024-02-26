@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import type { LOGIN_FIELDS } from '~/types/auth'
-import Card from '~/components/UI/Card.vue'
-import Button from '~/components/UI/Button.vue'
 
 definePageMeta({
   middleware: ['guest'],
@@ -34,7 +32,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <Card class="md:w-9/12 lg:w-1/2  text-md md:text-lg bg-white">
+  <UICard class="md:w-9/12 lg:w-1/2  text-md md:text-lg bg-white">
     <template #title>
       <div class="mb-4 border-b text-center flex flex-col space-y-2 pb-2">
         <div class="text-sm">
@@ -58,9 +56,9 @@ const handleLogin = async () => {
       </div>
 
       <div class="flex items-center justify-between">
-        <Button type="submit" :loading="loading">
+        <UiButton type="submit" :loading="loading">
           Login
-        </Button>
+        </UiButton>
 
         <div>
           <label>
@@ -78,7 +76,7 @@ const handleLogin = async () => {
         </NuxtLink>
       </p>
     </div>
-  </Card>
+  </UICard>
 </template>
 
 <style scoped></style>

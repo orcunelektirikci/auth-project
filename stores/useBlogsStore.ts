@@ -18,6 +18,6 @@ export const useBlogsStore = defineStore('blogs', {
     ...globalGetters,
   },
   actions: {
-    ...globalActions(this),
+    ...globalActions,
   },
 })

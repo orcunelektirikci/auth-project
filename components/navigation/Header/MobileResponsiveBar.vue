@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Bars2Icon, XMarkIcon } from '@heroicons/vue/24/solid'
-import Button from '~/components/UI/Button.vue'
 import type { NAV_ITEM } from '~/types/UI/menu'
 
 interface PROPS {
@@ -61,7 +60,7 @@ watch(
           </ul>
         </div>
         <div class="flex items-center gap-6 md:hidden z-50">
-          <Button
+          <UiButton
             variant="text"
             :rounded="false"
             size="xl"
@@ -71,7 +70,7 @@ watch(
           >
             <XMarkIcon v-if="showMenu" class="w-8" />
             <Bars2Icon v-else class="w-8" />
-          </Button>
+          </UiButton>
         </div>
       </div>
     </nav>

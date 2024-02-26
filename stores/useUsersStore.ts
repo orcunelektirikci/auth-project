@@ -18,6 +18,6 @@ export const useUsersStore = defineStore('users', {
     ...globalGetters,
   },
   actions: {
-    ...globalActions(this),
+    ...globalActions,
   },
 })

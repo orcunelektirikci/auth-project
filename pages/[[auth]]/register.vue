@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import type { REGISTER_FIELDS } from '~/types/auth'
-import Button from '~/components/UI/Button.vue'
-import Card from '~/components/UI/Card.vue'
 
 definePageMeta({
   middleware: ['guest'],
@@ -22,7 +20,7 @@ const handleRegister = () => {
 </script>
 
 <template>
-  <Card class="md:w-9/12 lg:w-1/2 text-md md:text-lg bg-white">
+  <UICard class="md:w-9/12 lg:w-1/2 text-md md:text-lg bg-white">
     <template #title>
       <div class="mb-4 border-b text-center flex flex-col space-y-2 pb-2">
         <div class="text-sm">
@@ -54,9 +52,9 @@ const handleRegister = () => {
       </div>
 
       <div class="flex items-center justify-center">
-        <Button type="submit">
+        <UiButton type="submit">
           Register
-        </Button>
+        </UiButton>
       </div>
     </form>
 
@@ -68,7 +66,7 @@ const handleRegister = () => {
         </NuxtLink>
       </p>
     </div>
-  </Card>
+  </UICard>
 </template>
 
 <style scoped></style>

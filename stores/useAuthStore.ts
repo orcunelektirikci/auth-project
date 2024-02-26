@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isLoggedIn: (state): boolean => !!state.user,
+    isAdmin: (state): boolean => !!state.user?.roles?.includes('admin'),
   },
   actions: {
     setAuthUser(userData: USER) {

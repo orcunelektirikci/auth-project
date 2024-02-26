@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { MoonIcon, SunIcon } from '@heroicons/vue/24/outline'
 import { useAuthStore } from '@/stores/useAuthStore'
-import Button from '~/components/UI/Button.vue'
-import LangSwitcher from '~/components/Navigation/LangSwitcher.vue'
-import MobileResponsiveBar from '~/components/Navigation/Header/MobileResponsiveBar.vue'
 
-// Head
 const { t } = useI18n()
 const i18nHead = useLocaleHead()
 
@@ -23,7 +19,6 @@ useSeoMeta({
   ogTitle: '%s | %siteName',
   twitterTitle: '%s | %siteName',
 })
-// Head
 
 const authStore = useAuthStore()
 const api = useApi()
@@ -69,7 +64,7 @@ useHead({
 
 <template>
   <div class="min-h-screen font-sans bg-gradient-to-tl from-primary-lighter dark:from-primary-dark to-primary-lighter dark:to-primary-dark via-accent-lighter dark:via-accent-dark">
-    <MobileResponsiveBar :items="navItems">
+    <NavigationHeaderMobileResponsiveBar :items="navItems">
       <template #logo>
         <div class="flex items-center h-full text-primary dark:text-primary-light">
           <NuxtLink to="/">
@@ -79,7 +74,7 @@ useHead({
       </template>
       <template #outer_buttons>
         <ClientOnly>
-          <LangSwitcher />
+          <NavigationLangSwitcher />
         </ClientOnly>
         <div class="p-1 border rounded-full bg-white dark:bg-secondary-darker dark:text-primary-light hover:bg-secondary-lighter dark:hover:bg-secondary cursor-pointer" @click="toggleDarkMode">
           <MoonIcon v-if="!isDark" class="w-6" />
@@ -87,11 +82,11 @@ useHead({
         </div>
       </template>
       <template #action_buttons>
-        <Button size="md" @click="handleLogout">
+        <UiButton size="md" @click="handleLogout">
           Logout
-        </Button>
+        </UiButton>
       </template>
-    </MobileResponsiveBar>
+    </NavigationHeaderMobileResponsiveBar>
     <main class="px-[2vw] container py-5 mx-auto">
       <slot />
     </main>

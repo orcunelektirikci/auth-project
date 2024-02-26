@@ -44,6 +44,12 @@ switch (props.variant) {
   case 'outlined':
     btnVariant = 'border bg-transparent text-primary'
     break
+  case 'success':
+    btnVariant = 'border bg-green-500 text-white'
+    break
+  case 'danger':
+    btnVariant = 'border bg-red-300 text-white'
+    break
   case 'text':
     btnVariant = 'border-none bg-transparent text-primary'
     break
