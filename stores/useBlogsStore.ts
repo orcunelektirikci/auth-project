@@ -6,6 +6,10 @@ import type { BLOG_ITEMS } from '~/types/store/blogs'
 export const useBlogsStore = defineStore('blogs', {
   state: () => ({
     storeName: 'blogs',
+    title: {
+      plural: 'blogs.title.plural',
+      singular: 'blogs.title.singular',
+    },
     pagination: {
       // Todo:: populate
       itemsPerPage: 20,

@@ -6,6 +6,10 @@ import globalActions from '~/stores/globalActions'
 export const useUsersStore = defineStore('users', {
   state: () => ({
     storeName: 'users',
+    title: {
+      plural: 'users.title.plural',
+      singular: 'users.title.singular',
+    },
     pagination: {
       // Todo:: populate
       itemsPerPage: 20,

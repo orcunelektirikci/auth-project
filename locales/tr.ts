@@ -1,6 +1,7 @@
 export default {
   general: {
     siteTitle: 'Auth Projesi',
+    createResource: '{resourceName} Oluştur',
   },
 
   errors: {
@@ -32,6 +33,21 @@ export default {
     head: {
       title: 'Blog Gönderileri',
     },
+    title: {
+      singular: 'Blog',
+      plural: 'Blog Gönderileri',
+    },
     404: '{id} ID\'li blog gönderisi bulunamadı!',
+  },
+
+  users: {
+    head: {
+      title: 'Kullanıcılar',
+    },
+    title: {
+      singular: 'Kullanıcı',
+      plural: 'Kullanıcılar',
+    },
+    404: 'User ID: {id} could not be found!',
   },
 }

@@ -1,6 +1,7 @@
 export default {
   general: {
     siteTitle: 'Auth Project',
+    createResource: 'Create {resourceName}',
   },
 
   errors: {
@@ -32,6 +33,21 @@ export default {
     head: {
       title: 'Blog Posts',
     },
+    title: {
+      singular: 'Blog',
+      plural: 'Blog Posts',
+    },
     404: 'Blog ID: {id} could not be found!',
+  },
+
+  users: {
+    head: {
+      title: 'Users',
+    },
+    title: {
+      singular: 'User',
+      plural: 'Users',
+    },
+    404: 'User ID: {id} could not be found!',
   },
 }

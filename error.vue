@@ -17,7 +17,7 @@ const { t } = useI18n()
 const authStore = useAuthStore()
 
 const isAdminError = computed(() => {
-  return props.error.url.startsWith('/admin') && authStore.isLoggedIn && authStore.isAdmin
+  return props.error.url?.startsWith('/admin') && authStore.isLoggedIn && authStore.isAdmin
 })
 const layout = computed(() => isAdminError.value ? 'admin' : 'default')
 
