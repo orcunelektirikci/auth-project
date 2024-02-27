@@ -1,5 +1,7 @@
 # Nuxt3 Starter Kit with Laravel Passport or Sanctum Auth
 
+_This is a work in progress. It should not be used in production builds until it's stated here as ready._
+
 ### Uses: 
 
 - Pinia
