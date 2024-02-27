@@ -19,7 +19,6 @@ if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName)) {
 
 const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]()
 
-console.log({ store })
 const items = ref([])
 
 onMounted(async () => {
