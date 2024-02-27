@@ -12,7 +12,6 @@ export interface Blog {
   author: User
 }
 
-// Todo:: solve the issue with storing objects in the state
 export interface BlogItems {
   [key: number | string]: Blog
 }
