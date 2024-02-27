@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import type { StoreDefinition } from 'pinia'
 import type { Item } from '~/types/store/defaults'
+import availableStores from '~/stores'
 
 interface Props {
   storeName: string
@@ -11,14 +13,11 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 
-// Todo:: this needs to be improved
-const availableStores = {
-  blogs: useBlogsStore,
-  users: useUsersStore,
+if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName)) {
+  throw createError({ statusCode: 404, message: t('errors.notFound') })
 }
 
-// @ts-expect-error I am well aware of this issue but skipping for now
-const store = availableStores[props.storeName as string]()
+const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]()
 
 console.log({ store })
 const items = ref([])
