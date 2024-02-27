@@ -12,7 +12,7 @@ export function useApi() {
   const authProvider = config.public?.authProvider || 'sanctum'
 
   if (!Object.prototype.hasOwnProperty.call(supportedProviders, authProvider))
-    throw createError({ statusCode: 500, message: `${authProvider} is not supported!` })
+    throw createError({ statusCode: 500, message: `${authProvider} is not supported!` }, true)
 
   const provider = supportedProviders[authProvider as SupportedAuthProviders]
   return provider()
