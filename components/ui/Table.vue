@@ -1,77 +1,110 @@
 <script setup lang="ts">
+import type { defineComponent } from 'vue'
+import type { PaginationType, StateItems } from '~/types/store/defaults'
+import columnMap from '~/plugins/columnMap'
+
 interface TableProps {
-  columns: { text: string, key: string, relation?: string }[]
-  items: { id: number | string }[]
-  pagination: Record<string, any> | false
+  columns: { label: string, key: string, sortable?: boolean, isComponent?: boolean, component?: string }[]
+  items: { id: number | string }[] | StateItems
+  pagination: PaginationType | false
+  loading: boolean
 }
 
 const props = withDefaults(defineProps<TableProps>(), {
   columns: () => [],
   items: () => [],
+  loading: false,
 })
 
-const emit = defineEmits(['acted'])
+const emit = defineEmits(['acted', 'pageChanged'])
 
-if (props.pagination) {
-  console.log(props.pagination)
-}
+const sort = ref({
+  column: 'id',
+  direction: 'asc',
+})
 
 const act = (item: object) => {
   emit('acted', item)
 }
+
+const q = ref('')
+
+// const filteredRows = computed(() => {
+//   if (!q.value) {
+//     return props.items
+//   }
+//
+//   return props.items.filter((person) => {
+//     return Object.values(person).some((value) => {
+//       return String(value).toLowerCase().includes(q.value.toLowerCase())
+//     })
+//   })
+// })
+
+const selectedColumns = ref([...props.columns])
+
+const itemsNormalized = computed(() => Array.isArray(props.items) ? [...props.items] : Object.values(props.items))
+
+const page = ref(1)
+const pageCount = computed(() => props.pagination ? props.pagination.itemsPerPage : 15)
+const total = computed(() => props.pagination ? props.pagination.totalItems : itemsNormalized.value.length)
+const rows = computed(() => {
+  let pageItems = []
+  if (props.pagination && props.pagination.itemsByPage[page.value] && props.pagination.itemsByPage[page.value].length) {
+    pageItems = props.pagination.itemsByPage[page.value]
+      .map(id => itemsNormalized.value.find((item) => {
+        return +item.id === +id
+      }))
+      .filter(item => item)
+  }
+  else {
+    pageItems = itemsNormalized.value.slice((page.value - 1) * pageCount.value, (page.value) * pageCount.value)
+  }
+
+  return pageItems
+})
+
+watch(page, n => emit('pageChanged', n))
+onBeforeUnmount(() => emit('pageChanged', 1))
+
+const resolve = (componentName: string): ReturnType<typeof defineComponent> | undefined => {
+  return columnMap[componentName]
+}
 </script>
 
 <template>
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-3">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <template v-for="column in columns" :key="column">
-            <th scope="col" class="px-6 py-3">
-              {{ column.text }}
-            </th>
-          </template>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in items" :key="item.id" class="cursor-pointer bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" @click="act(item)">
-          <th v-for="column in columns" :key="`row_${column}`" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ column.relation ? (item[column.relation] ? item[column.relation][column.key] : '') : item[column.key] }}
-          </th>
-        </tr>
-      </tbody>
-    </table>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-      <span v-if="pagination" class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-        Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span>
-      </span>
-      <span v-else class="text-sm font-normal self-end text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-        Total {{ items.length }} items
-      </span>
-      <ul v-if="pagination" class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-        </li>
-        <li>
-          <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-        </li>
-        <li>
-          <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-        </li>
-      </ul>
-    </nav>
+  <div>
+    <div class="flex justify-between px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+      <UInput v-model="q" placeholder="Filter..." />
+      <USelectMenu
+        v-model="selectedColumns"
+        :options="columns"
+        multiple
+        placeholder="Columns"
+      />
+    </div>
+    <UTable
+      :loading="loading"
+      :sort="sort"
+      :columns="selectedColumns"
+      :rows="rows"
+    >
+      <template v-for="column in selectedColumns" :key="column.key" #[`${column.key}-data`]="{ row }">
+        <template v-if="column.isComponent && column.component">
+          <component :is="resolve(column.component)" :active="row" :options="column" class="cursor-pointer" @click="act(row)" />
+        </template>
+
+        <span v-else class="cursor-pointer" @click="act(row)">{{ row[column.key] }}</span>
+      </template>
+    </UTable>
+    <div v-if="pagination" class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
+      <UPagination
+        v-model="page"
+        :page-count="pageCount"
+        size="md"
+        :total="total"
+      />
+    </div>
   </div>
 </template>
 

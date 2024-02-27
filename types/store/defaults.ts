@@ -3,10 +3,12 @@ import type { ComputedRef } from 'vue'
 export interface PaginationType {
   itemsPerPage: number
   currentPage: number
-  pageCount: number
+  lastPage: number
+  totalItems: number
+  itemsByPage: Record<number, Array<number>>
 }
 
-interface HasId {
+export interface HasId {
   id: number | string
 }
 
@@ -24,16 +26,19 @@ export interface State {
   storeName: string
   pagination: PaginationType
   title: TitleType
+  model: { table: { columns: object[] }, form: object }
 }
 
 export interface Actions {
   merge: (this: ThisType<any>, resource: Record<string, any>) => void
+  setPagination: (this: ThisType<any>, pagination: object, idsInPage: string[]) => void
 }
 
 export interface Getters {
   getItems: ComputedRef<Record<string, any>[]>
   find: ComputedRef<Record<string, any>>
-  getTitle: (type: string) => string
+  getPluralTitle: (type: string) => string
+  getSingularTitle: (type: string) => string
 }
 
 export interface StoreType extends State, Actions, Getters {}

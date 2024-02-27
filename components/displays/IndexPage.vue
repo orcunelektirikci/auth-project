@@ -2,10 +2,10 @@
 import type { StoreDefinition } from 'pinia'
 import type { Item } from '~/types/store/defaults'
 import availableStores from '~/stores'
+import CreateModal from '~/components/resource/CreateModal.vue'
 
 interface Props {
   storeName: string
-  columns: { text: string, key: string, relation?: string }[]
   detailText?: string
 }
 
@@ -17,46 +17,70 @@ if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName)) {
   throw createError({ statusCode: 404, message: t('errors.notFound'), fatal: true })
 }
 
-const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]()
+const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]
 
-const items = ref([])
+const columns = store().getTableColumns
+const pagination = store().getPagination
+const loading = ref(false)
 
 onMounted(async () => {
-  await store.index()
-  items.value = Object.values(store.getItems)
+  loading.value = true
+  await store().setPagination({ current_page: 1 })
+  await store().index()
+  loading.value = false
 })
 
 const goTo = (item: Item) => {
   navigateTo(`/admin/${props.storeName}/${item.id}`)
 }
 
-const showCreateModal = ref(false)
+const modal = useModal()
+const count = ref(0)
+
 const showCreate = () => {
-  showCreateModal.value = true
+  count.value += 1
+  modal.open(CreateModal, {
+    store: props.storeName,
+  })
 }
 
-const pluralTitle = t(store.getPluralTitle)
-const singularTitle = t(store.getSingularTitle)
+const pluralTitle = t(store().getPluralTitle)
+const singularTitle = t(store().getSingularTitle)
+
+const handlePageChange = async (page: number) => {
+  loading.value = true
+  await store().setPagination({ current_page: page })
+  await store().index({ page })
+  loading.value = false
+}
+
+const items = computed(() => Object.values(store().items))
 </script>
 
 <template>
   <div>
-    <UiModal :show="showCreateModal" />
+    <UiModal :show="showCreate" />
     <div class="flex flex-col">
       <div class="flex justify-between items-center my-2">
         <div class="text-2xl text-secondary-dark">
           {{ pluralTitle }}
         </div>
-        <UiButton variant="success" @click="showCreate">
-          {{ t('general.createResource', { resourceName: singularTitle }) }}
-        </UiButton>
+        <UButton :label="t('general.createResource', { resourceName: singularTitle })" @click="showCreate" />
       </div>
 
       <p v-if="detailText" class="my-3 text-sm font-normal text-gray-500 dark:text-gray-400">
         {{ detailText }}
       </p>
       <div class="mt-5 h-full">
-        <UiTable :columns="columns" :items="items" :pagination="false" @acted="goTo" />
+        <UiTable
+          :loading="loading"
+          :columns="columns"
+          :items="items"
+          :pagination="pagination"
+          :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }"
+          @acted="goTo"
+          @page-changed="handlePageChange"
+        />
       </div>
     </div>
   </div>

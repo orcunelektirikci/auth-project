@@ -53,14 +53,14 @@ watch(
 </script>
 
 <template>
-  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+  <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
           <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <Bars3BottomLeftIcon class="size-6" @click="toggleDrawer" />
           </button>
-          <NuxtLink to="/admin" class="text-xl sm:text-2xl font-semibold whitespace-nowrap dark:text-white">
+          <NuxtLink to="/admin" class="text-xl sm:text-2xl font-semibold whitespace-nowrap text-black dark:text-white">
             Auth Project
           </NuxtLink>
         </div>
@@ -86,7 +86,7 @@ watch(
       <ul class="space-y-2 font-medium">
         <template v-for="navItem in navItems" :key="navItem.id">
           <li>
-            <NuxtLink :to="navItem.to" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <NuxtLink :to="navItem.to" active-class="bg-gray-200 dark:bg-gray-100" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
               <component :is="navItem.icon" class="size-5" />
               <span class="ms-3">{{ navItem.text }}</span>
             </NuxtLink>
@@ -96,11 +96,13 @@ watch(
     </div>
   </aside>
 
-  <div class="p-4 sm:ml-64">
+  <div class="p-4 sm:ml-64 bg-white dark:bg-gray-900/50">
     <div class="p-4 mt-14">
       <slot />
     </div>
   </div>
+
+  <UModals />
 </template>
 
 <style scoped></style>

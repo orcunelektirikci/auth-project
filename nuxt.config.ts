@@ -42,8 +42,8 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    '@nuxtjs/tailwindcss',
     '@vee-validate/nuxt',
+    '@nuxt/ui',
     // ['nuxt-bugsnag', {
     //   config: {
     //     baseUrl: 'http://localhost:3000',

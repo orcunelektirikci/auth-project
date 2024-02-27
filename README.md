@@ -1,6 +1,6 @@
 # Nuxt3 Starter Kit with Laravel Passport or Sanctum Auth
 
-### Includes: 
+### Uses: 
 
 - Pinia
 - Persisted State
@@ -10,4 +10,14 @@
 - Tailwind
 - Admin Panel And Frontend (WIP)
 - SEO support (WIP)
-- Tests (WIP)
+- Unit Tests (WIP)
+- Nuxt UI (WIP)
+
+### Soon to be added:
+
+- NuxtUI Forms with Vee-Validate or FormKit
+- Filter system
+- System-wide search
+- File Manager
+
+and more...

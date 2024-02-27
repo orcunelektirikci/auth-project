@@ -1,8 +1,7 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss'
+import colors from 'tailwindcss/colors'
 
-const colors = require('tailwindcss/colors')
-
-module.exports = {
+export default <Partial<Config>>{
   darkMode: ['selector', '.darkModeActive'],
   theme: {
     extend: {
