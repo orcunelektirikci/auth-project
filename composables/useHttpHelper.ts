@@ -10,7 +10,7 @@ export function useHttpHelper() {
   }
 
   const notfound = (message: string | undefined) => {
-    throw createError({ statusCode: 404, message: message || useI18n().t('errors.notFound') })
+    throw createError({ statusCode: 404, message: message || useI18n().t('errors.notFound'), fatal: true })
   }
 
   const specialErrorCodes: Record<number, (message: string | undefined) => void> = {

@@ -14,7 +14,7 @@ const props = defineProps<Props>()
 const { t } = useI18n()
 
 if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName)) {
-  throw createError({ statusCode: 404, message: t('errors.notFound') })
+  throw createError({ statusCode: 404, message: t('errors.notFound'), fatal: true })
 }
 
 const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]()
