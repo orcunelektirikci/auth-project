@@ -1,3 +1,5 @@
+import type { Obj } from '~/types/objects'
+
 export interface User {
   id: number
   name: string
@@ -5,6 +7,4 @@ export interface User {
   roles?: string[]
 }
 
-export interface UserItems {
-  [key: number | string]: User
-}
+export type UserItems = Obj<User>

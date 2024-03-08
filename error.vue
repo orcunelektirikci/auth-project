@@ -1,5 +1,5 @@
 <script setup lang="ts">
-interface PROPS {
+interface Props {
   error: {
     url: string
     statusCode: string
@@ -10,7 +10,7 @@ interface PROPS {
   }
 }
 
-const props = defineProps<PROPS>()
+const props = defineProps<Props>()
 
 const { t } = useI18n()
 
@@ -31,7 +31,7 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <NuxtLayout :name="layout">
-      <div class="container h-screen flex flex-col items-center justify-center">
+      <UContainer class="flex flex-col items-center justify-center">
         <h2 class="text-6xl font-extrabold tracking-[0.5rem] text-primary">
           {{ error.statusCode }}
         </h2>
@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
         <UiButton type="button" size="xl" @click="handleError">
           {{ t('errors.notfoundBtn') }}
         </UiButton>
-      </div>
+      </UContainer>
     </NuxtLayout>
   </div>
 </template>

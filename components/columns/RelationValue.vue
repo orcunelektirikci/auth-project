@@ -1,17 +1,16 @@
 <script setup lang="ts">
+import type { StateItem } from '~/types/store/defaults'
+
 interface Props {
-  active: Record<string, any>
+  active: StateItem
   options: { relation: string, key: string }
 }
 const props = defineProps<Props>()
 
 const relationValue = ref('')
 
-if (props.active[props.options.relation] && props.active[props.options.relation][props.options.key]) {
+if (props.active[props.options.relation] && props.active[props.options.relation][props.options.key])
   relationValue.value = props.active[props.options.relation][props.options.key]
-}
-
-console.log({ relationValue: relationValue.value })
 </script>
 
 <template>

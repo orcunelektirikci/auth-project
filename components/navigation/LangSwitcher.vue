@@ -9,11 +9,11 @@ const availableLocales = computed(() => {
 
 <template>
   <NuxtLink
-    v-for="locale in availableLocales"
-    :key="locale.code"
-    :to="switchLocalePath(locale.code)"
+    v-for="local in availableLocales"
+    :key="local.code"
+    :to="switchLocalePath(local.code)"
     class="text-primary"
   >
-    {{ locale.name }}
+    {{ local.name }}
   </NuxtLink>
 </template>

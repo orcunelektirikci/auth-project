@@ -3,32 +3,28 @@ export default {
     siteTitle: 'Auth Projesi',
     createResource: '{resourceName} Oluştur',
   },
-
+  validation: {},
   errors: {
     apiProviderNotFound: 'Api Servis Sağlayıcı:{provider} Bulunamadı!',
     notFound: 'Sayfa bulunamadı!',
     notfoundBtn: 'Ana sayfaya gitmek için buraya tıklayın',
     unauthenticated: 'Giriş Yapmalısınız!',
   },
-
-  success: {
-    resourceCreated: 'Kayıt oluşturuldu!',
-    resourceUpdated: 'Kayıt güncellendi!',
-    resourceDeleted: 'Kayıt silindi!',
-  },
-
   auth: {
     login: {
       couldNotLogin: 'Giriş yapılamadı!',
     },
   },
-
+  success: {
+    resourceCreated: 'Kayıt oluşturuldu!',
+    resourceUpdated: 'Kayıt güncellendi!',
+    resourceDeleted: 'Kayıt silindi!',
+  },
   home: {
     head: {
       title: 'Ana Sayfa',
     },
   },
-
   blogs: {
     head: {
       title: 'Blog Gönderileri',
@@ -39,7 +35,6 @@ export default {
     },
     404: '{id} ID\'li blog gönderisi bulunamadı!',
   },
-
   users: {
     head: {
       title: 'Kullanıcılar',

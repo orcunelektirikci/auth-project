@@ -2,17 +2,17 @@
 import { Bars2Icon, XMarkIcon } from '@heroicons/vue/24/solid'
 import type { NavItem } from '~/types/UI/menu'
 
-interface PROPS {
+interface Props {
   items: NavItem[]
 }
 
-withDefaults(defineProps<PROPS>(), {
+withDefaults(defineProps<Props>(), {
   items: () => [],
 })
 
 const showMenu = ref(false)
 
-const toggleMenu = () => {
+function toggleMenu() {
   showMenu.value = !showMenu.value
 }
 

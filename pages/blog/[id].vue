@@ -11,9 +11,8 @@ onMounted(async () => {
   await store.show(route.params.id as string)
   blog.value = store.find(route.params.id as string) as Blog
 
-  if (!blog.value) {
+  if (!blog.value)
     throw createError({ statusCode: 404, message: t('blogs.404', { id: route.params.id }), fatal: true })
-  }
 })
 </script>
 

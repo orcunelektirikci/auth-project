@@ -1,4 +1,22 @@
 export default {
+  storeName: 'blogs',
+  title: {
+    plural: 'blogs.title.plural',
+    singular: 'blogs.title.singular',
+  },
+  pagination: {
+    itemsPerPage: 15,
+    currentPage: 1,
+    lastPage: 1,
+    totalItems: 0,
+    itemsByPage: {},
+  },
+  relationships: [
+    {
+      key: 'author',
+      store: 'users',
+    },
+  ],
   table: {
     columns: [
       {

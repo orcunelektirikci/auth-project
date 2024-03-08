@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StoreDefinition } from 'pinia'
-import type { Item } from '~/types/store/defaults'
+import type { StateItem } from '~/types/store/defaults'
 import availableStores from '~/stores'
 import CreateModal from '~/components/resource/CreateModal.vue'
 
@@ -13,9 +13,8 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 
-if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName)) {
+if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName))
   throw createError({ statusCode: 404, message: t('errors.notFound'), fatal: true })
-}
 
 const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]
 
@@ -30,14 +29,14 @@ onMounted(async () => {
   loading.value = false
 })
 
-const goTo = (item: Item) => {
-  navigateTo(`/admin/${props.storeName}/${item.id}`)
+function goTo(item: StateItem) {
+  return navigateTo(`/admin/${props.storeName}/${item.id}`)
 }
 
 const modal = useModal()
 const count = ref(0)
 
-const showCreate = () => {
+function showCreate() {
   count.value += 1
   modal.open(CreateModal, {
     store: props.storeName,
@@ -47,7 +46,7 @@ const showCreate = () => {
 const pluralTitle = t(store().getPluralTitle)
 const singularTitle = t(store().getSingularTitle)
 
-const handlePageChange = async (page: number) => {
+async function handlePageChange(page: number) {
   loading.value = true
   await store().setPagination({ current_page: page })
   await store().index({ page })

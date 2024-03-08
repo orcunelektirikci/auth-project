@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import type { ClassValue } from 'clsx'
-
-interface PROPS {
-  name: string
-  val: string | undefined
-  rules: string[]
+interface Props {
+  variant?: 'underline' | 'default'
+  name?: string
+  label?: string
+  type?: 'text' | 'password' | 'email' | 'tel'
 }
 
-const props = withDefaults(defineProps<PROPS>(), {
+const props = withDefaults(defineProps<Props>(), {
+  variant: 'default',
   name: '',
-  value: undefined,
+  label: '',
+  type: 'text',
 })
 
-const val = ref('')
+const modelValue = defineModel()
 
-const changed = (event: KeyboardEvent) => {
-  const target = event.target as HTMLInputElement
-  val.value = target.value
-}
-
-const computedValue = computed({
-  get() {
-    return val.value
-  },
-  set(v) {
-    val.value = v
-  },
-})
-
-onMounted(() => {
-  if (props.val) {
-    computedValue.value = props.value
+const ui = computed(() => {
+  switch (props.variant) {
+    case 'underline':
+      return {
+        base: 'border-0 border-b-[1px]',
+        rounded: 'rounded-none',
+      }
+    default:
+      return undefined
   }
 })
 </script>
 
 <template>
-  <input v-bind="$props.rules" :value="computedValue" :class="cn('m-3', $attrs.class as ClassValue)" @change="changed">
+  <UFormGroup :label="label" :name="name">
+    <UInput
+      v-model="modelValue"
+      :variant="variant === 'default' ? 'outline' : 'none'"
+      :type
+      :ui
+    />
+  </UFormGroup>
 </template>
 
 <style scoped>

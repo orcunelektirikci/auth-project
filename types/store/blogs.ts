@@ -1,9 +1,5 @@
-// interface FILTER_PARAMS {
-//   field: string
-//   value: any
-// }
-
 import type { User } from '~/types/store/users'
+import type { Obj } from '~/types/objects'
 
 export interface Blog {
   id: number
@@ -12,6 +8,4 @@ export interface Blog {
   author: User
 }
 
-export interface BlogItems {
-  [key: number | string]: Blog
-}
+export type BlogItems = Obj<Blog>

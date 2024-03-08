@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
       this.accessToken = token
     },
     logout() {
-      useApi().logout()
+      void useApi().logout()
       this.$reset()
     },
   },

@@ -5,7 +5,7 @@ export function useHttpHelper() {
   const unAuthenticate = (message: string | undefined) => {
     const authStore = useAuthStore()
     authStore.logout()
-    useToastMessage(401, message || useNuxtApp().$i18n.t('errors.unauthenticated')).showError()
+    useToastMessage(message || useNuxtApp().$i18n.t('errors.unauthenticated'), 401).showError()
     return navigateTo('/login')
   }
 
@@ -13,7 +13,7 @@ export function useHttpHelper() {
     throw createError({ statusCode: 404, message: message || useI18n().t('errors.notFound'), fatal: true })
   }
 
-  const specialErrorCodes: Record<number, (message: string | undefined) => void> = {
+  const specialErrorCodes: Record<number, (message: string | undefined) => ReturnType<typeof createError | typeof navigateTo>> = {
     401: unAuthenticate,
     403: unAuthenticate,
     404: notfound,
@@ -21,13 +21,13 @@ export function useHttpHelper() {
   }
 
   const parseErrorHandler = (response: ErrorResponse) => {
-    const errorHandler = specialErrorCodes[response.status || response.statusCode || 0]
+    const errorHandler = specialErrorCodes[response.status as number || response.statusCode || 0]
     const message = response?.data?.message || response?._data?.message || response?.message || response?.statusText || undefined
 
     if (errorHandler)
       return errorHandler(message)
     else
-      useToastMessage(response.status || response.statusCode || 500, message || '')
+      useToastMessage(message || '', response.status || response.statusCode || 500)
   }
 
   return {

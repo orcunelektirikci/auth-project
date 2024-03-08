@@ -13,9 +13,8 @@ const registerForm = reactive<RegisterFields>({
   password_confirmation: '',
 })
 
-const handleRegister = () => {
+function handleRegister() {
   // Todo::implement
-  console.log({ registerForm })
 }
 </script>
 

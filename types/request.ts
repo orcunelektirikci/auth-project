@@ -1,8 +1,15 @@
-export type RestVerb = 'GET' | 'get' | 'POST' | 'post' | 'PUT' | 'put' | 'PATCH' | 'patch' | 'DELETE' | 'delete'
+import type { StrObj } from '~/types/objects'
+
+export type RestVerb = 'GET' | 'get' |
+  'POST' | 'post' |
+  'PUT' | 'put' |
+  'PATCH' | 'patch' |
+  'DELETE' | 'delete' |
+  'OPTIONS' | 'options'
 
 export interface FetchOptions {
   method?: RestVerb
-  headers?: Record<string, string>
+  headers?: StrObj
   body?: object | null
   baseURL?: string
 }

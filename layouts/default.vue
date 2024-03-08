@@ -24,7 +24,7 @@ const authStore = useAuthStore()
 const api = useApi()
 const isLoggedIn = computed(() => authStore.isLoggedIn)
 
-const handleLogout = () => {
+function handleLogout() {
   api.reset()
   authStore.logout()
 
@@ -51,7 +51,7 @@ const navItems = [
 
 const isDark = ref(false)
 
-const toggleDarkMode = () => {
+function toggleDarkMode() {
   isDark.value = !isDark.value
 }
 

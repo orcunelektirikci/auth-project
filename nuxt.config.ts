@@ -42,7 +42,6 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
-    '@vee-validate/nuxt',
     '@nuxt/ui',
     // ['nuxt-bugsnag', {
     //   config: {
@@ -75,7 +74,7 @@ export default defineNuxtConfig({
       },
     }],
   ],
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.css',
     configPath: 'tailwind.config',

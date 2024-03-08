@@ -1,14 +1,24 @@
 <script lang="ts" setup>
-import type { LoginFields } from '~/types/auth'
+import { z } from 'zod'
+
+import type { FormSubmitEvent } from '#ui/types'
+
+const schema = z.object({
+  email: z.string().email('Invalid email').trim(),
+  password: z.string().min(3, 'Must be at least 8 characters').trim(),
+  remember: z.boolean().default(true),
+})
+
+type Schema = z.output<typeof schema>
 
 definePageMeta({
   middleware: ['guest'],
   layout: 'auth',
 })
 
-const loginForm = reactive<LoginFields>({
-  email: '',
-  password: '',
+const loginForm = reactive<Schema>({
+  email: 'test@example.com',
+  password: '123456',
   remember: true,
 })
 
@@ -18,65 +28,57 @@ const { login } = useApi()
 
 const authStore = useAuthStore()
 
-const handleLogin = async () => {
+async function handleLogin(event: FormSubmitEvent<Schema>) {
   loading.value = true
-  const result = await login(loginForm.email, loginForm.password, !!loginForm.remember)
+  const result = await login(event.data.email, event.data.password, event.data.remember)
 
   if (!result.error) {
     authStore.setAccessToken(result.access_token)
     authStore.setAuthUser(result.user)
-    navigateTo('/', { replace: true })
+    if (result.user.roles?.includes('admin'))
+      navigateTo('/admin', { replace: true })
+
+    else
+      navigateTo('/', { replace: true })
   }
   loading.value = false
 }
 </script>
 
 <template>
-  <UiCard class="md:w-9/12 lg:w-1/2  text-md md:text-lg bg-white">
-    <template #title>
-      <div class="mb-4 border-b text-center flex flex-col space-y-2 pb-2">
-        <div class="text-sm">
-          AuthProject
+  <UCard class="w-11/12 md:w-9/12 lg:w-1/2  text-md md:text-lg bg-white">
+    <template #header>
+      <div class="text-center flex flex-col space-y-1 py-2">
+        <div class="text-2xl">
+          Auth Project
         </div>
-        <div>
+        <div class="text-sm">
           Login
         </div>
       </div>
     </template>
-    <form class="md:w-9/12 lg:w-2/3  mx-auto" @submit.prevent="handleLogin">
-      <div class="flex flex-col space-y-3 mb-10">
-        <div class="flex justify-between items-center">
-          <label for="email">E-mail</label>
-          <input id="email" v-model="loginForm.email" type="email" class="outline-none border rounded px-2 py-1 text-md">
+    <template #default>
+      <UForm :schema="schema" :state="loginForm" class="space-y-4" @submit="handleLogin">
+        <FormTextInput v-model="loginForm.email" variant="underline" name="email" label="E-Mail" />
+        <FormTextInput v-model="loginForm.password" variant="underline" name="password" label="Password" type="password" />
+        <div class="flex flex-col justify-between items-center space-y-8 pt-4">
+          <FormCheckbox v-model="loginForm.remember" name="remember" label="Remember Me?" />
+          <UButton type="submit" size="xl" block>
+            Login
+          </UButton>
         </div>
-        <div class="flex justify-between items-center space-x-4">
-          <label for="password">Password</label>
-          <input id="password" v-model="loginForm.password" type="password" class="outline-none border rounded px-2 py-1 text-md">
-        </div>
+      </UForm>
+    </template>
+    <template #footer>
+      <div class="mt-4 text-center md:w-4/6 lg:w-3/5 mx-auto">
+        <p>Don't have an account?</p> <p>
+          <NuxtLink to="/register" tag="a" class="text-teal-700">
+            Register here
+          </NuxtLink>
+        </p>
       </div>
-
-      <div class="flex items-center justify-between">
-        <UiButton type="submit" :loading="loading">
-          Login
-        </UiButton>
-
-        <div>
-          <label>
-            <input v-model="loginForm.remember" type="checkbox" value="remember">
-            <span class="ml-2">Remember me?</span>
-          </label>
-        </div>
-      </div>
-    </form>
-
-    <div class="mt-4 text-center md:w-4/6 lg:w-3/5 mx-auto">
-      <p>Don't have an account?</p> <p>
-        <NuxtLink to="/register" tag="a" class="text-primary">
-          Register here
-        </NuxtLink>
-      </p>
-    </div>
-  </UiCard>
+    </template>
+  </UCard>
 </template>
 
 <style scoped></style>

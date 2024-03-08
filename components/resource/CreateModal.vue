@@ -2,10 +2,7 @@
 interface Props {
   store: string
 }
-
-const props = defineProps<Props>()
-
-console.log({ store: props.store })
+defineProps<Props>()
 
 const isOpen = ref(false)
 
@@ -16,6 +13,7 @@ defineShortcuts({
     handler: () => { isOpen.value = false },
   },
 })
+// const cardTitle = ref()
 </script>
 
 <template>
@@ -24,9 +22,12 @@ defineShortcuts({
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            Create {{ store }}
+            {{ $t('general.createResource', { resourceName: $t(`${store}.title.singular`) }) }}
           </h3>
         </div>
+      </template>
+      <template #default>
+        <FormBuilderContainer :store-name="store" />
       </template>
     </UCard>
   </UModal>

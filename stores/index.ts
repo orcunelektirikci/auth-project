@@ -1,7 +1,9 @@
 import { useBlogsStore } from '~/stores/useBlogsStore'
 import { useUsersStore } from '~/stores/useUsersStore'
 
-export default {
+const storeMap = {
   blogs: useBlogsStore,
   users: useUsersStore,
 }
+
+export default storeMap

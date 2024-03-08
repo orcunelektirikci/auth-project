@@ -1,18 +1,19 @@
 import type { FetchOptions, TokenType } from '~/types/request'
 import type { ApiComposable } from '~/types/api'
 import { useHttpHelper } from '~/composables/useHttpHelper'
-import type { LoginData, LoginResponseData } from '~/types/response'
-import type { User } from '~/types/store/users'
+import type { HttpResponse, LoginData, LoginResponse } from '~/types/response'
 import { sanitizeUrl } from '~/utils/helpers'
-
-const accessToken = ref<string>('')
-const refreshToken = ref<string>('')
+import type { StrObj } from '~/types/objects'
+import type { HasId } from '~/types/store/defaults'
 
 export function usePassport(): ApiComposable {
+  const accessToken = useState('access_token', () => '')
+  const refreshToken = useState('refresh_token', () => '')
+
   const config = useRuntimeConfig()
 
-  const sendRequest = async (uri: string, options: FetchOptions = {}, addApiPrefix: boolean = true) => {
-    let headers = { Accept: 'application/json', ...(options.headers || {}) } as Record<string, string>
+  const sendRequest = async (uri: string, options: FetchOptions = {}, addApiPrefix: boolean = true): Promise<HttpResponse> => {
+    let headers = { Accept: 'application/json', ...(options.headers || {}) } as StrObj
     let oauthToken = ''
 
     if (config.public.apiUrl)
@@ -29,25 +30,34 @@ export function usePassport(): ApiComposable {
     if (!options.method)
       options.method = 'GET'
 
-    return $fetch(sanitizeUrl(uri), {
-      retry: false,
-      cache: 'no-cache',
-      ...options,
-      headers,
-      watch: false,
-      onResponseError({ response: errResponse }) {
-        useHttpHelper().parseErrorHandler(errResponse)
-      },
-    }).catch((err) => {
-      return err
-    })
+    try {
+      const fetch: Promise<HttpResponse> = $fetch(sanitizeUrl(uri), {
+        retry: false,
+        cache: 'no-cache',
+        ...options,
+        headers,
+        watch: false,
+        onResponseError({ response: errResponse }) {
+          void useHttpHelper().parseErrorHandler(errResponse)
+        },
+      })
+
+      return fetch
+    }
+    catch (err) {
+      return await Promise.reject(err)
+    }
   }
 
   const revokeToken = (type: TokenType = 'access_token') => {
-    if (type === 'refresh_token')
+    if (type === 'refresh_token') {
       refreshToken.value = ''
-    else
+      clearNuxtState('refresh_token')
+    }
+    else {
       accessToken.value = ''
+      clearNuxtState('access_token')
+    }
   }
 
   const setToken = (type: TokenType, value: string) => {
@@ -64,17 +74,18 @@ export function usePassport(): ApiComposable {
     accessToken.value = ''
     refreshToken.value = ''
     localStorage.removeItem('oauth-token')
+    clearNuxtState(['access_token', 'refresh_token'])
   }
 
   const fetchUser = async () => {
-    const me: any = await sendRequest(config.public.apiUserPath)
+    const me = await sendRequest(config.public.apiUserPath)
 
-    if (me.error) {
-      useToastMessage(me.error.statusCode, me.error.message).showError()
-      return me.error
+    if ('error' in me && me.error && me.error.message) {
+      useToastMessage(me.error.message, me.error.statusCode).showError()
+      return Promise.reject(me.error)
     }
 
-    return me
+    return Promise.resolve(me)
   }
 
   const login = async (username: string, password: string) => {
@@ -85,8 +96,7 @@ export function usePassport(): ApiComposable {
       scope: '*',
     }
 
-    // @ts-expect-error fix fetch types
-    const loginResponse: LoginResponseData = await sendRequest(config.public.apiLoginPath, {
+    const loginResponse: LoginResponse = await sendRequest(config.public.apiLoginPath, {
       method: 'POST',
       body: { ...passportConfig, username, password },
     }, false)
@@ -102,16 +112,16 @@ export function usePassport(): ApiComposable {
     if ('refresh_token' in loginResponse && loginResponse.refresh_token)
       setToken('refresh_token', loginResponse.refresh_token)
 
-    // @ts-expect-error fix fetch types
-    const resp: LoginData & { user: User } = { ...loginResponse }
+    const resp: LoginData = { ...loginResponse }
 
     const me = await fetchUser()
-    resp.user = me.data
+    if (!('error' in me))
+      resp.user = me.data as HasId
 
     return resp
   }
 
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     reset()
   }
 

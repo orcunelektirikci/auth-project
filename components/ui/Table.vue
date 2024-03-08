@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { defineComponent } from 'vue'
 import type { PaginationType, StateItems } from '~/types/store/defaults'
-import columnMap from '~/plugins/columnMap'
+import { useColumnMap } from '~/composables/columnMap'
 
 interface TableProps {
   columns: { label: string, key: string, sortable?: boolean, isComponent?: boolean, component?: string }[]
@@ -23,7 +23,7 @@ const sort = ref({
   direction: 'asc',
 })
 
-const act = (item: object) => {
+function act(item: object) {
   emit('acted', item)
 }
 
@@ -64,10 +64,52 @@ const rows = computed(() => {
   return pageItems
 })
 
-watch(page, n => emit('pageChanged', n))
+onMounted(async () => {
+  await nextTick(async () => {
+    if (props.pagination) {
+      const query = useRoute().query
+      if ('page' in query) {
+        if (Number(query.page) > Number(props.pagination.lastPage)) {
+          page.value = props.pagination.lastPage
+          await useRouter().replace({
+            query: { ...useRoute().query, page: page.value },
+          })
+        }
+
+        else if (Number(query.page) < 1) {
+          page.value = 1
+          await useRouter().replace({
+            query: { ...useRoute().query, page: page.value },
+          })
+        }
+
+        else if (Number(query.page) !== page.value) {
+          page.value = Number(query.page)
+        }
+      }
+      else {
+        page.value = 1
+        await useRouter().replace({
+          query: { ...useRoute().query, page: page.value },
+        })
+      }
+    }
+  })
+})
+
+watch(page, (n) => {
+  if (props.pagination) {
+    useRouter().replace({
+      query: { ...useRoute().query, page: n },
+    })
+  }
+  emit('pageChanged', n)
+})
 onBeforeUnmount(() => emit('pageChanged', 1))
 
-const resolve = (componentName: string): ReturnType<typeof defineComponent> | undefined => {
+const columnMap = useColumnMap()
+
+function resolve(componentName: string): ReturnType<typeof defineComponent> | undefined {
   return columnMap[componentName]
 }
 </script>
