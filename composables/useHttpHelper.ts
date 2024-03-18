@@ -21,7 +21,7 @@ export function useHttpHelper() {
   }
 
   const parseErrorHandler = (response: ErrorResponse) => {
-    const errorHandler = specialErrorCodes[response.status as number || response.statusCode || 0]
+    const errorHandler = specialErrorCodes[Number(response.status) || response.statusCode || 0]
     const message = response?.data?.message || response?._data?.message || response?.message || response?.statusText || undefined
 
     if (errorHandler)

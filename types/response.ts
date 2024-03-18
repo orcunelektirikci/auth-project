@@ -1,8 +1,8 @@
-import type { HasId, PaginationType } from '~/types/store/defaults'
+import type { ApiPaginationResponse, HasId } from '~/types/store/defaults'
 
 export interface SuccessResponse {
   data: HasId | HasId[]
-  meta?: PaginationType
+  meta?: ApiPaginationResponse
 }
 
 export interface ErrorResponse {

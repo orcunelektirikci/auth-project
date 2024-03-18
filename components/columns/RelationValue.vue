@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { StrObj } from '~/types/objects'
 import type { StateItem } from '~/types/store/defaults'
 
 interface Props {
@@ -9,8 +10,10 @@ const props = defineProps<Props>()
 
 const relationValue = ref('')
 
-if (props.active[props.options.relation] && props.active[props.options.relation][props.options.key])
-  relationValue.value = props.active[props.options.relation][props.options.key]
+const relation = props.active[props.options.relation] as StrObj | undefined
+
+if (relation && relation[props.options.key])
+  relationValue.value = relation[props.options.key]
 </script>
 
 <template>

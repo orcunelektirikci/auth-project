@@ -17,3 +17,6 @@ export const useUsersStore = defineStore('users', {
     ...globalActions,
   },
 })
+
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useUsersStore, import.meta.hot))

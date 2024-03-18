@@ -24,14 +24,14 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiUrl: process.env.API_BASE_URL,
-      passportClientId: process.env.PASSPORT_CLIENT_ID,
-      passportClientSecret: process.env.PASSPORT_CLIENT_SECRET,
-      authProvider: process.env.AUTH_PROVIDER || 'sanctum',
-      apiUserPath: process.env.API_USER_PATH || 'me',
-      apiLoginPath: process.env.API_LOGIN_PATH || 'login',
-      apiCookiePath: process.env.API_COOKIE_PATH || 'sanctum/csrf-cookie',
-      apiPrefix: process.env.API_PREFIX || 'api/',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL,
+      passportClientId: process.env.NUXT_PUBLIC_PASSPORT_CLIENT_ID,
+      passportClientSecret: process.env.NUXT_PUBLIC_PASSPORT_CLIENT_SECRET,
+      authProvider: process.env.NUXT_PUBLIC_AUTH_PROVIDER || 'sanctum',
+      apiUserPath: process.env.NUXT_PUBLIC_API_USER_PATH || 'me',
+      apiLoginPath: process.env.NUXT_PUBLIC_API_LOGIN_PATH || 'login',
+      apiCookiePath: process.env.NUXT_PUBLIC_API_COOKIE_PATH || 'sanctum/csrf-cookie',
+      apiPrefix: process.env.NUXT_PUBLIC_API_PREFIX || 'api/',
     },
   },
   components: {
@@ -50,7 +50,7 @@ export default defineNuxtConfig({
     //   },
     // }],
     ['@nuxtjs/sitemap', {
-      site: process.env.APP_URL,
+      site: process.env.NUXT_PUBLIC_APP_URL,
       trailingSlash: true,
     }],
     ['@nuxtjs/i18n', {
@@ -60,7 +60,7 @@ export default defineNuxtConfig({
         cookieKey: 'i18n_redirected',
         redirectOn: 'root',
       },
-      baseUrl: process.env.APP_URL,
+      baseUrl: process.env.NUXT_PUBLIC_APP_URL,
       langDir: 'locales',
       locales: [
         { code: 'tr', iso: 'tr-TR', file: 'tr.ts' },

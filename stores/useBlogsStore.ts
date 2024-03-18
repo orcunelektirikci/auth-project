@@ -17,3 +17,6 @@ export const useBlogsStore = defineStore('blogs', {
     ...globalActions,
   },
 })
+
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useBlogsStore, import.meta.hot))

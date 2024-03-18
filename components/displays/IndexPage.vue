@@ -3,6 +3,7 @@ import type { StoreDefinition } from 'pinia'
 import type { StateItem } from '~/types/store/defaults'
 import availableStores from '~/stores'
 import CreateModal from '~/components/resource/CreateModal.vue'
+import { objHas } from '~/utils/helpers'
 
 interface Props {
   storeName: string
@@ -13,10 +14,10 @@ const props = defineProps<Props>()
 
 const { t } = useI18n()
 
-if (!Object.prototype.hasOwnProperty.call(availableStores, props.storeName))
+if (!objHas(availableStores, props.storeName))
   throw createError({ statusCode: 404, message: t('errors.notFound'), fatal: true })
 
-const store = (availableStores as Record<string, () => ReturnType<StoreDefinition>>)[props.storeName]
+const store = availableStores[props.storeName]
 
 const columns = store().getTableColumns
 const pagination = store().getPagination

@@ -1,9 +1,9 @@
 import { normalizeResource } from './helpers'
 import { useApi } from '~/composables/useApi'
-import type { HasId, StateItem, StateItems, StoreType } from '~/types/store/defaults'
-import type { Arr, Dictionary, TypableObj } from '~/types/objects'
+import type { Actions, HasId, StateItem, StateItems, StoreType } from '~/types/store/defaults'
+import type { Arr, TypableObj } from '~/types/objects'
 
-const globalActions = {
+const globalActions: Actions = {
   merge(this: StoreType, resource: StateItems) {
     const newState = JSON.parse(JSON.stringify(this.items)) as StateItems
     for (const r in resource) {
@@ -13,7 +13,7 @@ const globalActions = {
     this.items = newState
   },
   //
-  setPagination(this: StoreType, { current_page, last_page, total, per_page }: { current_page?: number, last_page?: number, total?: number, per_page?: number }, idsInPage: Arr<number>,
+  setPagination(this: StoreType, { current_page, last_page, total, per_page }, idsInPage: Arr<number>,
   ) {
     this.model.pagination.currentPage = current_page || 1
     this.model.pagination.lastPage = last_page || 1
@@ -28,18 +28,18 @@ const globalActions = {
       const normalized = normalizeResource(response.data)
 
       if (response.meta)
-        this.setPagination(response.meta, Object.keys(normalized))
+        this.setPagination(response.meta, Object.keys(normalized).map(k => Number(k)))
 
       this.merge(normalized)
     }
   },
-  async show(this: StoreType, id: number) {
+  async show(this: StoreType, id) {
     const response = await useApi().sendRequest(`${this.model.storeName}/${id}`)
 
     if ('data' in response && response.data)
       this.merge(normalizeResource(response.data))
   },
-  async create(this: StoreType, body: Dictionary) {
+  async create(this: StoreType, body) {
     const response = await useApi().sendRequest(this.model.storeName, {
       method: 'post',
       body,
@@ -50,7 +50,7 @@ const globalActions = {
       useToastMessage(useI18n().t('success.resourceCreated'), 200).showSuccess()
     }
   },
-  async update(this: StoreType, id: number, body: Dictionary) {
+  async update(this: StoreType, id, body) {
     const response = await useApi().sendRequest(this.model.storeName, {
       method: 'put',
       body,

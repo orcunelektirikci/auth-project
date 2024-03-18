@@ -1,21 +1,21 @@
 import type { StoreDefinition } from 'pinia'
 import type { HasId, RelationObject, StateItem, StateItems } from '~/types/store/defaults'
-import type { Dictionary } from '~/types/objects'
+import type { Dictionary, NumKeyObj } from '~/types/objects'
 import availableStores from '~/stores/index'
 
-export function normalizeResource(resource: Array<HasId> | HasId) {
+export function normalizeResource(resource: Array<HasId> | HasId): StateItems {
   const normalized = {} as Record<number, HasId>
 
   if (Array.isArray(resource)) {
     resource.forEach((r) => {
-      normalized[r.id as number] = r
+      normalized[Number(r.id)] = r
     })
   }
   else {
-    normalized[resource.id as number] = resource
+    normalized[Number(resource.id)] = resource
   }
 
-  return normalized
+  return <NumKeyObj<StateItem>>normalized
 }
 
 export function populateRelations(relations: RelationObject[], item: StateItem): StateItem {

@@ -24,23 +24,19 @@ const loginForm = reactive<Schema>({
 
 const loading = ref(false)
 
-const { login } = useApi()
-
 const authStore = useAuthStore()
 
 async function handleLogin(event: FormSubmitEvent<Schema>) {
   loading.value = true
-  const result = await login(event.data.email, event.data.password, event.data.remember)
+  const result = await authStore.login(event.data.email, event.data.password, event.data.remember)
 
-  if (!result.error) {
-    authStore.setAccessToken(result.access_token)
-    authStore.setAuthUser(result.user)
-    if (result.user.roles?.includes('admin'))
+  if (result && !result.error) {
+    if (authStore.user && authStore.user.roles?.includes('admin'))
       navigateTo('/admin', { replace: true })
-
     else
       navigateTo('/', { replace: true })
   }
+
   loading.value = false
 }
 </script>

@@ -2,14 +2,15 @@
 import type { defineComponent } from 'vue'
 import type { PaginationType, StateItems } from '~/types/store/defaults'
 import { useColumnMap } from '~/composables/columnMap'
+import { objHas } from '~/utils/helpers'
+import type { TableColumn } from '~/types/UI/table'
 
 interface TableProps {
-  columns: { label: string, key: string, sortable?: boolean, isComponent?: boolean, component?: string }[]
+  columns: TableColumn[]
   items: { id: number | string }[] | StateItems
   pagination: PaginationType | false
   loading: boolean
 }
-
 const props = withDefaults(defineProps<TableProps>(), {
   columns: () => [],
   items: () => [],
@@ -42,12 +43,14 @@ const q = ref('')
 // })
 
 const selectedColumns = ref([...props.columns])
+const orderedColumns = computed(() => selectedColumns.value.sort((a: TableColumn, b: TableColumn) => a.order - b.order))
 
 const itemsNormalized = computed(() => Array.isArray(props.items) ? [...props.items] : Object.values(props.items))
 
 const page = ref(1)
 const pageCount = computed(() => props.pagination ? props.pagination.itemsPerPage : 15)
 const total = computed(() => props.pagination ? props.pagination.totalItems : itemsNormalized.value.length)
+
 const rows = computed(() => {
   let pageItems = []
   if (props.pagination && props.pagination.itemsByPage[page.value] && props.pagination.itemsByPage[page.value].length) {
@@ -65,10 +68,10 @@ const rows = computed(() => {
 })
 
 onMounted(async () => {
-  await nextTick(async () => {
+  setTimeout(async () => {
     if (props.pagination) {
       const query = useRoute().query
-      if ('page' in query) {
+      if (objHas(query, 'page')) {
         if (Number(query.page) > Number(props.pagination.lastPage)) {
           page.value = props.pagination.lastPage
           await useRouter().replace({
@@ -94,7 +97,7 @@ onMounted(async () => {
         })
       }
     }
-  })
+  }, 150)
 })
 
 watch(page, (n) => {
@@ -116,8 +119,8 @@ function resolve(componentName: string): ReturnType<typeof defineComponent> | un
 
 <template>
   <div>
-    <div class="flex justify-between px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-      <UInput v-model="q" placeholder="Filter..." />
+    <div class="flex justify-end gap-x-1.5 py-3.5 border-b border-gray-200 dark:border-gray-700">
+      <UInput v-model="q" placeholder="Full Text Search..." />
       <USelectMenu
         v-model="selectedColumns"
         :options="columns"
@@ -128,10 +131,10 @@ function resolve(componentName: string): ReturnType<typeof defineComponent> | un
     <UTable
       :loading="loading"
       :sort="sort"
-      :columns="selectedColumns"
+      :columns="orderedColumns"
       :rows="rows"
     >
-      <template v-for="column in selectedColumns" :key="column.key" #[`${column.key}-data`]="{ row }">
+      <template v-for="column in orderedColumns" :key="column.key" #[`${column.key}-data`]="{ row }">
         <template v-if="column.isComponent && column.component">
           <component :is="resolve(column.component)" :active="row" :options="column" class="cursor-pointer" @click="act(row)" />
         </template>

@@ -1,10 +1,9 @@
-import type { FetchOptions } from '~/types/request'
-import type { HttpResponse, LoginData, LoginResponse } from '~/types/response'
 import { useHttpHelper } from '~/composables/useHttpHelper'
 import { sanitizeUrl } from '~/utils/helpers'
+import type { FetchOptions } from '~/types/request'
+import type { HttpResponse, LoginResponse } from '~/types/response'
 import type { StrObj } from '~/types/objects'
 import type { ApiComposable } from '~/types/api'
-import type { HasId } from '~/types/store/defaults'
 
 export function useSanctum(): ApiComposable {
   const accessToken = useState('access_token', () => '')
@@ -48,7 +47,7 @@ export function useSanctum(): ApiComposable {
       return fetch
     }
     catch (err) {
-      return await Promise.reject(err)
+      return Promise.reject(err)
     }
   }
 
@@ -90,7 +89,7 @@ export function useSanctum(): ApiComposable {
     return Promise.resolve(me)
   }
 
-  const login = async (email: string, password: string, remember: boolean = false) => {
+  const login = async (email: string, password: string, remember?: boolean) => {
     const csrfToken = await getCsrfCookie()
 
     if (!csrfToken.value) {
@@ -107,17 +106,7 @@ export function useSanctum(): ApiComposable {
       setToken(loginResponse.access_token)
       localStorage.setItem('oauth-token', loginResponse.access_token)
     }
-    else {
-      return loginResponse
-    }
-
-    const resp: LoginData = { ...loginResponse }
-
-    const me = await fetchUser()
-    if (!('error' in me))
-      resp.user = me.data as HasId
-
-    return resp
+    return loginResponse
   }
 
   const logout = async () => {

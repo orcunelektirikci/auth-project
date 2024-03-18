@@ -1,5 +1,5 @@
-import type { ComputedRef } from 'vue'
-import type { Dictionary, NumKeyObj, NumKeyObjArr, Obj } from '~/types/objects'
+import type { Arr, Dictionary, NumKeyObj, NumKeyObjArr, Obj, StrKeyObj, TypableObj } from '~/types/objects'
+import type { TableColumn } from '~/types/UI/table'
 
 export interface PaginationType {
   itemsPerPage: number
@@ -14,13 +14,13 @@ export interface HasId {
 }
 
 export interface StateItem extends HasId,
-  Record<string | number, string | number | Obj<unknown> | Array<string | number | Obj<unknown>>> {}
+  Record<string | number, undefined | string | number | Obj<unknown> | Array<string | number | Obj<unknown>>> {}
 
 export type StateItems = NumKeyObj<StateItem>
 
 export interface TitleType {
-  singular: string
   plural: string
+  singular: string
 }
 
 export interface RelationObject {
@@ -28,31 +28,48 @@ export interface RelationObject {
   store: string
 }
 
-export interface State {
-  items: StateItems
-  model: {
-    relationships: RelationObject[]
-    storeName: string
-    pagination: PaginationType
-    title: TitleType
-    table: {
-      columns: Dictionary[]
-    }
-    form: object
+export interface StateModel {
+  relationships: RelationObject[]
+  storeName: string
+  pagination: PaginationType
+  title: TitleType
+  table: {
+    columns: TableColumn[]
   }
+  form: object
+}
+
+export interface State extends StrKeyObj<any> {
+  items: StateItems
+  model: StateModel
+}
+
+export interface ApiPaginationResponse {
+  current_page?: number
+  last_page?: number
+  total?: number
+  per_page?: number
 }
 
 export interface Actions {
-  merge: (this: ThisType<any>, resource: Dictionary) => void
-  setPagination: (this: ThisType<any>, pagination: PaginationType, idsInPage: string[]) => void
-  index: (this: ThisType<any>, params: Obj<unknown>) => void
+  merge: (resource: StateItems) => void
+  setPagination: (pagination: ApiPaginationResponse, idsInPage: Arr<number>) => void
+  index: (params: TypableObj) => Promise<void>
+  show: (id: number) => Promise<void>
+  create: (body: Dictionary) => Promise<void>
+  update: (id: number, body: Dictionary) => Promise<void>
+  delete: (id: number) => Promise<void>
 }
 
+type FindFn = (itemToFind: number | string | StateItem) => StateItem | undefined
+
 export interface Getters {
-  getItems: ComputedRef<Dictionary[]>
-  find: ComputedRef<Dictionary>
-  getPluralTitle: (type: string) => string
-  getSingularTitle: (type: string) => string
+  find: (state: State) => FindFn
+  getItems: (state: State) => StateItem[]
+  getPluralTitle: (state: State) => string
+  getSingularTitle: (state: State) => string
+  getTableColumns: (state: State) => TableColumn[]
+  getPagination: (state: State) => PaginationType
 }
 
 export interface StoreType extends State, Getters, Actions {}

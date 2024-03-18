@@ -1,10 +1,9 @@
+import { useHttpHelper } from '~/composables/useHttpHelper'
+import { sanitizeUrl } from '~/utils/helpers'
+import type { HttpResponse, LoginResponse } from '~/types/response'
 import type { FetchOptions, TokenType } from '~/types/request'
 import type { ApiComposable } from '~/types/api'
-import { useHttpHelper } from '~/composables/useHttpHelper'
-import type { HttpResponse, LoginData, LoginResponse } from '~/types/response'
-import { sanitizeUrl } from '~/utils/helpers'
 import type { StrObj } from '~/types/objects'
-import type { HasId } from '~/types/store/defaults'
 
 export function usePassport(): ApiComposable {
   const accessToken = useState('access_token', () => '')
@@ -45,7 +44,7 @@ export function usePassport(): ApiComposable {
       return fetch
     }
     catch (err) {
-      return await Promise.reject(err)
+      return Promise.reject(err)
     }
   }
 
@@ -112,13 +111,7 @@ export function usePassport(): ApiComposable {
     if ('refresh_token' in loginResponse && loginResponse.refresh_token)
       setToken('refresh_token', loginResponse.refresh_token)
 
-    const resp: LoginData = { ...loginResponse }
-
-    const me = await fetchUser()
-    if (!('error' in me))
-      resp.user = me.data as HasId
-
-    return resp
+    return loginResponse
   }
 
   const logout = async (): Promise<void> => {

@@ -1,4 +1,6 @@
-export default {
+import type { StateModel } from '~/types/store/defaults'
+
+export default <StateModel> {
   storeName: 'blogs',
   title: {
     plural: 'blogs.title.plural',
@@ -21,18 +23,21 @@ export default {
     columns: [
       {
         id: 1,
+        order: 1,
         key: 'id',
         label: 'ID',
         sortable: true,
       },
       {
         id: 2,
+        order: 2,
         key: 'title',
         label: 'Title',
         sortable: true,
       },
       {
         id: 3,
+        order: 3,
         isComponent: true,
         component: 'columnsRelationValue',
         relation: 'author',
@@ -46,6 +51,7 @@ export default {
     fields: [
       {
         id: 1,
+        order: 1,
         component: 'TextInput',
         type: 'text',
         field: 'title',
@@ -59,6 +65,7 @@ export default {
       },
       {
         id: 2,
+        order: 2,
         component: 'TextareaInput',
         type: 'text',
         field: 'content',
@@ -72,6 +79,7 @@ export default {
       },
       {
         id: 3,
+        order: 3,
         component: 'RelationAutocompleteInput',
         type: 'autocomplete',
         field: 'author',
