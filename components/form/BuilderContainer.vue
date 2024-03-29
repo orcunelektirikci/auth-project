@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import resolveFormComponent from '~/mappers/formComponentsMap'
 import { availableStores } from '~/stores'
 import type { Arr, StrKeyObj } from '~/types/objects'
+import type { HttpResponse } from '~/types/response'
 
 interface Props {
   storeName: keyof typeof availableStores
@@ -34,8 +35,13 @@ const { schema } = useValidationSchema(formElements)
 async function submitForm() {
   const validated = schema.value.safeParse(state.value)
   if (validated.success) {
-    const response = await store.create(validated.data)
-    if (!response.error)
+    let response: HttpResponse
+    if ('id' in validated.data)
+      response = await store.update(validated.data)
+    else
+      response = await store.create(validated.data)
+
+    if (!('error' in response))
       emit('submitted')
   }
 }
