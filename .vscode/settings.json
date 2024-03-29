@@ -1,6 +1,9 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": null,
   "[typescript]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }
 }

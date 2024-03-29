@@ -4,6 +4,8 @@ interface Props {
 }
 defineProps<Props>()
 
+const { t } = useI18n()
+
 const isOpen = ref(false)
 
 defineShortcuts({
@@ -13,11 +15,20 @@ defineShortcuts({
     handler: () => { isOpen.value = false },
   },
 })
-// const cardTitle = ref()
+
+function close() {
+  const modal = useModal()
+  modal.close()
+}
+
+function submitted() {
+  useToastMessage(t('success.resourceCreated'), 200).showSuccess()
+  close()
+}
 </script>
 
 <template>
-  <UModal v-model="isOpen">
+  <UModal v-model="isOpen" :ui="{ base: 'overflow-visible' }">
     <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
       <template #header>
         <div class="flex items-center justify-between">
@@ -27,7 +38,7 @@ defineShortcuts({
         </div>
       </template>
       <template #default>
-        <FormBuilderContainer :store-name="store" />
+        <FormBuilderContainer :store-name="store" @submitted="submitted" @close="close" />
       </template>
     </UCard>
   </UModal>

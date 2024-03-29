@@ -88,6 +88,7 @@ useHead({
       </template>
     </NavigationHeaderMobileResponsiveBar>
     <main class="px-[2vw] container py-5 mx-auto">
+      <NuxtLoadingIndicator />
       <slot />
     </main>
   </div>
@@ -101,6 +102,5 @@ useHead({
 .page-enter-from,
 .page-leave-to {
     opacity: 0;
-    transform: translateY(-50%);
 }
 </style>

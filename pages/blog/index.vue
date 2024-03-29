@@ -5,7 +5,10 @@ onMounted(async () => {
 })
 
 const { t } = useI18n()
-useHead({
+// useHead({
+//   title: t('blogs.head.title'),
+// })
+useServerSeoMeta({
   title: t('blogs.head.title'),
 })
 </script>

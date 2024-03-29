@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { StoreDefinition } from 'pinia'
-import type { StateItem } from '~/types/store/defaults'
-import availableStores from '~/stores'
 import CreateModal from '~/components/resource/CreateModal.vue'
+import { availableStores } from '~/stores'
+import type { StateItem } from '~/types/store/defaults'
 import { objHas } from '~/utils/helpers'
 
 interface Props {
@@ -75,7 +74,7 @@ const items = computed(() => Object.values(store().items))
         <UiTable
           :loading="loading"
           :columns="columns"
-          :items="items"
+          :items="items as StateItem[]"
           :pagination="pagination"
           :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'No items.' }"
           @acted="goTo"

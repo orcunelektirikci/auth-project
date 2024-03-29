@@ -1,5 +1,5 @@
-import { useSanctum } from '~/composables/useSanctum'
 import { usePassport } from '~/composables/usePassport'
+import { useSanctum } from '~/composables/useSanctum'
 import type { ApiComposable, SupportedAuthProviders } from '~/types/api'
 import { objHas } from '~/utils/helpers'
 

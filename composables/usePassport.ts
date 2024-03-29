@@ -1,9 +1,9 @@
 import { useHttpHelper } from '~/composables/useHttpHelper'
-import { sanitizeUrl } from '~/utils/helpers'
-import type { HttpResponse, LoginResponse } from '~/types/response'
-import type { FetchOptions, TokenType } from '~/types/request'
 import type { ApiComposable } from '~/types/api'
 import type { StrObj } from '~/types/objects'
+import type { FetchOptions, TokenType } from '~/types/request'
+import type { HttpResponse, LoginResponse } from '~/types/response'
+import { sanitizeUrl } from '~/utils/helpers'
 
 export function usePassport(): ApiComposable {
   const accessToken = useState('access_token', () => '')

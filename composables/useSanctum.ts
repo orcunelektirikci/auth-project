@@ -1,9 +1,9 @@
 import { useHttpHelper } from '~/composables/useHttpHelper'
-import { sanitizeUrl } from '~/utils/helpers'
+import type { ApiComposable } from '~/types/api'
+import type { StrObj } from '~/types/objects'
 import type { FetchOptions } from '~/types/request'
 import type { HttpResponse, LoginResponse } from '~/types/response'
-import type { StrObj } from '~/types/objects'
-import type { ApiComposable } from '~/types/api'
+import { sanitizeUrl } from '~/utils/helpers'
 
 export function useSanctum(): ApiComposable {
   const accessToken = useState('access_token', () => '')
@@ -15,8 +15,11 @@ export function useSanctum(): ApiComposable {
     let oauthToken = ''
 
     const csrfToken = useCookie('XSRF-TOKEN')
+
     if (csrfToken.value)
       headers['X-XSRF-TOKEN'] = csrfToken.value
+    else
+      return Promise.reject(useHttpHelper().parseErrorHandler({ message: '', status: 401 }))
 
     if (config.public.apiUrl)
       options.baseURL = `${config.public.apiUrl}${sanitizeUrl(addApiPrefix && config.public.apiPrefix ? `${config.public.apiPrefix}` : '')}`
@@ -35,7 +38,7 @@ export function useSanctum(): ApiComposable {
     try {
       const fetch: Promise<HttpResponse> = $fetch(sanitizeUrl(uri), {
         retry: false,
-        cache: 'no-cache',
+        cache: 'force-cache',
         ...options,
         headers,
         watch: false,

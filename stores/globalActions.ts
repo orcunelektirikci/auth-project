@@ -1,7 +1,7 @@
-import { normalizeResource } from './helpers'
 import { useApi } from '~/composables/useApi'
-import type { Actions, HasId, StateItem, StateItems, StoreType } from '~/types/store/defaults'
 import type { Arr, TypableObj } from '~/types/objects'
+import type { Actions, HasId, StateItem, StateItems, StoreType } from '~/types/store/defaults'
+import { normalizeResource } from './helpers'
 
 const globalActions: Actions = {
   merge(this: StoreType, resource: StateItems) {
@@ -33,6 +33,14 @@ const globalActions: Actions = {
       this.merge(normalized)
     }
   },
+  async search(this: StoreType, params: TypableObj = {}) {
+    const response = await useApi().sendRequest(`${this.model.storeName}/search`, { params })
+
+    if ('data' in response && response.data)
+      return response.data
+
+    return {}
+  },
   async show(this: StoreType, id) {
     const response = await useApi().sendRequest(`${this.model.storeName}/${id}`)
 
@@ -45,10 +53,10 @@ const globalActions: Actions = {
       body,
     })
 
-    if ('data' in response && response.data) {
+    if ('data' in response && response.data)
       this.merge(normalizeResource(response.data))
-      useToastMessage(useI18n().t('success.resourceCreated'), 200).showSuccess()
-    }
+
+    return response
   },
   async update(this: StoreType, id, body) {
     const response = await useApi().sendRequest(this.model.storeName, {
@@ -56,10 +64,10 @@ const globalActions: Actions = {
       body,
     })
 
-    if ('data' in response && response.data) {
+    if ('data' in response && response.data)
       this.merge(normalizeResource(response.data))
-      useToastMessage(useI18n().t('success.resourceUpdated'), 200).showSuccess()
-    }
+    // Todo:: move this inside a setup function
+    // useToastMessage(useI18n().t('success.resourceUpdated'), 200).showSuccess()
   },
   async delete(this: StoreType, id: number) {
     const response = await useApi().sendRequest(`${this.model.storeName}/${id}`, {
@@ -70,10 +78,11 @@ const globalActions: Actions = {
       let index = -2
       index = Object.values(this.items).findIndex((item: StateItem) => item.id === (response.data as HasId).id)
 
-      if (index !== -1) {
+      if (index !== -1)
         delete this.items[id]
-        useToastMessage(useI18n().t('success.resourceDeleted'), 200).showSuccess()
-      }
+      // Todo:: move this inside a setup function
+
+      // useToastMessage(useI18n().t('success.resourceDeleted'), 200).showSuccess()
     }
   },
 }

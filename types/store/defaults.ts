@@ -1,5 +1,7 @@
-import type { Arr, Dictionary, NumKeyObj, NumKeyObjArr, Obj, StrKeyObj, TypableObj } from '~/types/objects'
 import type { TableColumn } from '~/types/UI/table'
+import type { FormField } from '~/types/form'
+import type { Arr, Dictionary, NumKeyObj, NumKeyObjArr, Obj, StrKeyObj, TypableObj } from '~/types/objects'
+import type { HttpResponse } from '../response'
 
 export interface PaginationType {
   itemsPerPage: number
@@ -11,6 +13,7 @@ export interface PaginationType {
 
 export interface HasId {
   id: number | string
+  [key: string | number | symbol]: any
 }
 
 export interface StateItem extends HasId,
@@ -36,7 +39,9 @@ export interface StateModel {
   table: {
     columns: TableColumn[]
   }
-  form: object
+  form: {
+    fields: FormField[]
+  }
 }
 
 export interface State extends StrKeyObj<any> {
@@ -55,8 +60,9 @@ export interface Actions {
   merge: (resource: StateItems) => void
   setPagination: (pagination: ApiPaginationResponse, idsInPage: Arr<number>) => void
   index: (params: TypableObj) => Promise<void>
-  show: (id: number) => Promise<void>
-  create: (body: Dictionary) => Promise<void>
+  search: (params: TypableObj) => Promise<object | object[] | null>
+  show: (id: number | string) => Promise<void>
+  create: (body: Dictionary) => Promise<HttpResponse>
   update: (id: number, body: Dictionary) => Promise<void>
   delete: (id: number) => Promise<void>
 }
@@ -70,6 +76,7 @@ export interface Getters {
   getSingularTitle: (state: State) => string
   getTableColumns: (state: State) => TableColumn[]
   getPagination: (state: State) => PaginationType
+  getFormFields: (state: State) => FormField[]
 }
 
 export interface StoreType extends State, Getters, Actions {}

@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { defineComponent } from 'vue'
-import type { PaginationType, StateItems } from '~/types/store/defaults'
-import { useColumnMap } from '~/composables/columnMap'
-import { objHas } from '~/utils/helpers'
+import resolve from '~/mappers/columnMap'
 import type { TableColumn } from '~/types/UI/table'
+import type { PaginationType, StateItems } from '~/types/store/defaults'
+import { objHas } from '~/utils/helpers'
 
 interface TableProps {
   columns: TableColumn[]
@@ -11,13 +10,18 @@ interface TableProps {
   pagination: PaginationType | false
   loading: boolean
 }
+
 const props = withDefaults(defineProps<TableProps>(), {
   columns: () => [],
   items: () => [],
   loading: false,
 })
 
-const emit = defineEmits(['acted', 'pageChanged'])
+const emit = defineEmits<TableEmits>()
+interface TableEmits {
+  (e: 'acted', item: object): void
+  (e: 'pageChanged', page: number): void
+}
 
 const sort = ref({
   column: 'id',
@@ -30,20 +34,8 @@ function act(item: object) {
 
 const q = ref('')
 
-// const filteredRows = computed(() => {
-//   if (!q.value) {
-//     return props.items
-//   }
-//
-//   return props.items.filter((person) => {
-//     return Object.values(person).some((value) => {
-//       return String(value).toLowerCase().includes(q.value.toLowerCase())
-//     })
-//   })
-// })
-
 const selectedColumns = ref([...props.columns])
-const orderedColumns = computed(() => selectedColumns.value.sort((a: TableColumn, b: TableColumn) => a.order - b.order))
+const orderedColumns = computed(() => selectedColumns.value.sort((a: TableColumn, b: TableColumn) => a.order - b.order) as TableColumn[])
 
 const itemsNormalized = computed(() => Array.isArray(props.items) ? [...props.items] : Object.values(props.items))
 
@@ -109,12 +101,6 @@ watch(page, (n) => {
   emit('pageChanged', n)
 })
 onBeforeUnmount(() => emit('pageChanged', 1))
-
-const columnMap = useColumnMap()
-
-function resolve(componentName: string): ReturnType<typeof defineComponent> | undefined {
-  return columnMap[componentName]
-}
 </script>
 
 <template>
@@ -156,3 +142,4 @@ function resolve(componentName: string): ReturnType<typeof defineComponent> | un
 <style scoped>
 
 </style>
+~/mappers/columnMap

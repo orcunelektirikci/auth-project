@@ -26,8 +26,9 @@ const globalGetters: Getters = {
   },
   getPluralTitle: state => state.model.title.plural,
   getSingularTitle: state => state.model.title.singular,
-  getTableColumns: state => state.model.table.columns,
+  getTableColumns: state => state.model.table.columns.sort((a, b) => a.order - b.order),
   getPagination: state => state.model.pagination,
+  getFormFields: state => state.model.form.fields.sort((a, b) => a.order - b.order),
 }
 
 export default globalGetters

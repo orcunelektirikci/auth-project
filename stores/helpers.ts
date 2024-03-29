@@ -1,7 +1,7 @@
 import type { StoreDefinition } from 'pinia'
-import type { HasId, RelationObject, StateItem, StateItems } from '~/types/store/defaults'
+import { availableStores } from '~/stores'
 import type { Dictionary, NumKeyObj } from '~/types/objects'
-import availableStores from '~/stores/index'
+import type { HasId, RelationObject, StateItem, StateItems } from '~/types/store/defaults'
 
 export function normalizeResource(resource: Array<HasId> | HasId): StateItems {
   const normalized = {} as Record<number, HasId>

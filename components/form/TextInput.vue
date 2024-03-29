@@ -4,6 +4,7 @@ interface Props {
   name?: string
   label?: string
   type?: 'text' | 'password' | 'email' | 'tel'
+  config?: any
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -11,6 +12,7 @@ const props = withDefaults(defineProps<Props>(), {
   name: '',
   label: '',
   type: 'text',
+  config: {},
 })
 
 const modelValue = defineModel()
@@ -35,6 +37,7 @@ const ui = computed(() => {
       :variant="variant === 'default' ? 'outline' : 'none'"
       :type
       :ui
+      v-bind="config"
     />
   </UFormGroup>
 </template>

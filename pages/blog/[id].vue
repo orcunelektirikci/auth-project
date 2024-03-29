@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { Blog } from '~/types/store/blogs'
+import type { Blog } from '~/types/store/blogs';
 
 const { t } = useI18n()
 
 const store = useBlogsStore()
-const route = useRoute()
+const id = useRoute().params.id as string
 const blog = ref<Blog>()
 
 onMounted(async () => {
-  await store.show(route.params.id as string)
-  blog.value = store.find(route.params.id as string) as Blog
+  await store.show(id)
+  blog.value = store.find(id) as Blog
 
   if (!blog.value)
-    throw createError({ statusCode: 404, message: t('blogs.404', { id: route.params.id }), fatal: true })
+    throw createError({ statusCode: 404, message: t('blogs.404', { id }), fatal: true })
 })
 </script>
 
