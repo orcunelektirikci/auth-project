@@ -25,7 +25,7 @@
     "pinia": "^2.1.7",
     "tailwind-merge": "^2.2.1",
     "unplugin-auto-import": "^0.17.5",
-    "vue": "^3.4.19",
+    "vue": "^3.4.20",
     "vue-router": "^4.2.5",
     "zod": "^3.22.4"
   },

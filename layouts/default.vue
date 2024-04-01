@@ -89,7 +89,9 @@ useHead({
     </NavigationHeaderMobileResponsiveBar>
     <main class="px-[2vw] container py-5 mx-auto">
       <NuxtLoadingIndicator />
-      <slot />
+      <Suspense>
+        <slot />
+      </Suspense>
     </main>
   </div>
 </template>

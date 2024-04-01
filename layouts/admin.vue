@@ -113,7 +113,9 @@ watch(
 
   <div class="p-4 sm:ml-64 bg-white dark:bg-gray-900/50">
     <div class="p-4 mt-14">
-      <slot />
+      <Suspense>
+        <slot />
+      </Suspense>
     </div>
   </div>
 </template>
