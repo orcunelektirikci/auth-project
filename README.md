@@ -10,6 +10,7 @@ _This is a work in progress. It should not be used in production builds until it
 - Bearer Auth Token and/or CSRF Tokens
 - Multi-language support
 - Tailwind
+- Dynamic Forms with Zod Validation
 - Admin Panel And Frontend (WIP)
 - SEO support (WIP)
 - Unit Tests (WIP)
@@ -17,7 +18,6 @@ _This is a work in progress. It should not be used in production builds until it
 
 ### Soon to be added:
 
-- NuxtUI Forms with Vee-Validate or FormKit
 - Filter system
 - System-wide search
 - File Manager
